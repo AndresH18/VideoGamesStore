@@ -40,8 +40,11 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "games",
     pattern: "{controller=Games}/page{gamePage:int}",
-    defaults: new {Action = "Index", gamePage = 1}
-);
+    defaults: new {Action = "Index", gamePage = 1});
+app.MapControllerRoute(
+    name: "games-category",
+    pattern: "{controller=Games}/{category}/page{gamePage:int}",
+    defaults: new {Action = "Index", gamePage = 1});
 
 app.MapControllers();
 

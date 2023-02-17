@@ -9,5 +9,7 @@ public class Game
     [Required(ErrorMessage = "You must give a name to the Game")]
     public string Name { get; set; } = default!;
 
-    [Range(1, double.MaxValue)] [Required] public double Price { get; set; }
+    [Required] [Range(1, double.MaxValue)] public double Price { get; set; }
+
+    [Required] public string Category { get; set; } = default!;
 }

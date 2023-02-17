@@ -14,9 +14,9 @@ public class GamesController : Controller
         _repo = repository;
     }
 
-    public async Task<IActionResult> Index(int gamePage)
+    public async Task<IActionResult> Index(int gamePage, string? category)
     {
-        var data = await _repo.Get(gamePage);
+        var data = await _repo.Get(category, gamePage);
         return View(data.ToList());
     }
 }
