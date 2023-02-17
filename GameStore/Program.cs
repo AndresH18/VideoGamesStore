@@ -1,9 +1,13 @@
+using GameStore.Data;
 using GameStore.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IGamesDb, GameDbSqlite>();
+
 builder.Services.AddScoped<IGamesRepository, GamesRepository>();
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();

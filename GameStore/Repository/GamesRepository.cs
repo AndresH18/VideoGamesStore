@@ -1,17 +1,31 @@
-﻿using GameStore.Data.Models;
+﻿using GameStore.Data;
+using GameStore.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Repository;
 
 public class GamesRepository : IGamesRepository
 {
-    public Task<IEnumerable<Game>> Get(string? category, int page)
+    private const int PageSize = 10;
+    private readonly IGamesDb _db;
+
+    public GamesRepository(IGamesDb db)
     {
-        return Task.FromResult(Enumerable.Range(page, 10).Select(i => new Game
-            {Id = i, Name = i.ToString(), Category = Guid.NewGuid().ToString()}));
+        _db = db;
     }
 
-    public Task<IEnumerable<string>> GetCategories()
+    public async Task<IEnumerable<Game>> Get(string? category, int page)
     {
-        return Task.FromResult(Enumerable.Range(0, 10).Select(i => i.ToString()));
+        return await _db.Games
+            .Include(g => g.Category)
+            .Where(g => category == null || g.Category.Name == category)
+            .Skip(PageSize * (page - 1))
+            .Take(PageSize)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<string>> GetCategories()
+    {
+        return await _db.Categories.Select(c => c.Name).Distinct().ToListAsync();
     }
 }
