@@ -1,4 +1,4 @@
-namespace GameStore.Models;
+namespace GameStore.Data.ViewModels;
 
 public class ErrorViewModel
 {

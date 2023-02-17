@@ -1,0 +1,13 @@
+﻿@model Game
+
+<div class="card m-1 p-1">
+    <div class="bg-gradient p-1">
+        <h4>
+            @Model.Name
+            <span class="badge round-pill bg-primary text-white" style="float:right">
+                <small>@Model.Price.ToString("C")</small>
+            </span>
+            @* TODO: form, add to cart *@
+        </h4>
+    </div>
+</div>

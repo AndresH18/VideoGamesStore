@@ -1,6 +1,10 @@
+using GameStore.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IGamesRepository, GamesRepository>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -33,6 +37,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "games",
+    pattern: "{controller=Games}/page{gamePage:int}",
+    defaults: new {Action = "Index", gamePage = 1}
+);
 
 app.MapControllers();
 

@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Game>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Games";
+}
+
+<h1>Games</h1>
+
+<ul class="list-group">
+    @foreach (var game in Model)
+    {
+        <li class="list-group-item">
+            <partial name="_ProductSummary" model="game"/>
+        </li>
+    }
+</ul>
