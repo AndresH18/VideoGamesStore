@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<GamesDbContext>(d => d.UseSqlServer(builder.Configuration.GetConnectionString("GamesDb")));
+builder.Services.AddDbContext<GamesDbContext>(d =>
+    d.UseSqlServer(builder.Configuration.GetConnectionString("GamesDb")));
 
 builder.Services.AddScoped<IGamesRepository, GamesRepository>();
 
@@ -48,7 +49,7 @@ app.MapControllerRoute(
     defaults: new {Action = "Index", gamePage = 1});
 app.MapControllerRoute(
     name: "games-category",
-    pattern: "{controller=Games}/{category}/page{gamePage:int}",
+    pattern: "{controller=Games}/{genre}/page{gamePage:int}",
     defaults: new {Action = "Index", gamePage = 1});
 
 app.MapControllers();

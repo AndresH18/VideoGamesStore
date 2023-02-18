@@ -16,11 +16,11 @@ public class NavigationMenuViewComponent : ViewComponent
     /// Invokes the <b>View Component</b>.
     /// </summary>
     /// <returns>The View Component.</returns>
-    /// <param name="paramName">The query string key that determines if the navigation item is active.</param>
+    /// <param name="paramName">The query string <b>key</b> that determines if the navigation item is active.</param>
     public async Task<IViewComponentResult> InvokeAsync(string paramName)
     {
         ViewBag.Selected = RouteData.Values[paramName]!;
         var list = await _repo.GetCategories();
-        return View();
+        return View(list);
     }
 }

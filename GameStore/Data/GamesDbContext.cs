@@ -30,6 +30,10 @@ public class GamesDbContext : DbContext
     {
         modelBuilder.Entity<Genre>().HasData(
             new Genre {Id = 1, Name = "Metroid-vania"},
-            new Genre {Id = 2, Name = "Puzzle"});
+            new Genre {Id = 2, Name = "Puzzle"},
+            new Genre{Id = 3, Name = "First Person Shooter"});
+        modelBuilder.Entity<Game>().HasData(
+            new Game {Id = 1, Name = "Metroid Prime Remastered", GenreId = 1, Price = 100_000},
+            new Game {Id = 2, Name = "Doom Eternal", GenreId = 3, Price = 150_000});
     }
 }
