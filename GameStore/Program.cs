@@ -1,5 +1,6 @@
 using GameStore.Data;
 using GameStore.Repository;
+using GameStore.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "games",
     pattern: "{controller=Games}/page{gamePage:int}",
@@ -50,7 +52,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "games-category",
     pattern: "{controller=Games}/{genre}/page{gamePage:int}",
-    defaults: new {Action = "Index", gamePage = 1});
+    defaults: new {Action = "Genre", gamePage = 1});
 
 app.MapControllers();
 

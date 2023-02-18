@@ -10,5 +10,5 @@ public interface IGamesRepository
     public Task<IEnumerable<Game>> GetGames(int pageNumber);
     public Task<IEnumerable<Game>> GetGamesByGenre(int genreId, int pageSize);
     public Task<IEnumerable<Game>> GetGamesByGenre(string genre, int pageSize);
-    public Task<IEnumerable<string>> GetCategories();
+    public Task<IEnumerable<Genre>> GetGenres();
 }

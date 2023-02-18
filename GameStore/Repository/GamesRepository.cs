@@ -1,6 +1,5 @@
 ﻿using GameStore.Data;
 using GameStore.Data.Models;
-using GameStore.Data.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Repository;
@@ -103,8 +102,8 @@ public class GamesRepository : IGamesRepository
             : Task.FromResult(Enumerable.Empty<Game>());
     }
 
-    public async Task<IEnumerable<string>> GetCategories()
+    public async Task<IEnumerable<Genre>> GetGenres()
     {
-        return await _db.Genres.Select(c => c.Name).Distinct().ToListAsync();
+        return await _db.Genres.ToListAsync();
     }
 }

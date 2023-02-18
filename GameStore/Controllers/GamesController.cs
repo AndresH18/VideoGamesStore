@@ -1,5 +1,7 @@
 ﻿using GameStore.Data.Models;
+using GameStore.Data.ViewModels;
 using GameStore.Repository;
+using GameStore.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameStore.Controllers;
@@ -7,23 +9,27 @@ namespace GameStore.Controllers;
 public class GamesController : Controller
 {
     private readonly ILogger<GamesController> _logger;
-    private readonly IGamesRepository _repo;
+    private readonly GamesService _service;
 
-    public GamesController(ILogger<GamesController> logger, IGamesRepository repository)
+    public GamesController(ILogger<GamesController> logger, GamesService service)
     {
         _logger = logger;
-        _repo = repository;
+        _service = service;
     }
 
-    public async Task<IActionResult> Index(string? genre, int gamePage = 1)
+    public async Task<IActionResult> Index(int gamePage = 1)
     {
-        IEnumerable<Game> data;
+        var model = await _service.GetGames(gamePage);
         
-        if (genre is null)
-            data = await _repo.GetGames(gamePage);
-        else
-            data = await _repo.GetGamesByGenre(genre, gamePage);
-        
-        return View(data.ToList());
+        return View(model);
+    }
+
+    public async Task<IActionResult> Genre(string genre, int gamePage)
+    {
+        if (string.IsNullOrWhiteSpace(genre))
+            return RedirectToAction(nameof(Index));
+
+        return null;
+
     }
 }

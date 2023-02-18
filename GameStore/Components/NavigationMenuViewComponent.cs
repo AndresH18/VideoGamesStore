@@ -19,8 +19,8 @@ public class NavigationMenuViewComponent : ViewComponent
     /// <param name="paramName">The query string <b>key</b> that determines if the navigation item is active.</param>
     public async Task<IViewComponentResult> InvokeAsync(string paramName)
     {
-        ViewBag.Selected = RouteData.Values[paramName]!;
-        var list = await _repo.GetCategories();
-        return View(list);
+    //     ViewBag.Selected = RouteData.Values[paramName]!;
+    //     var list = await _repo.GetGenres();
+        return View(null);
     }
 }
