@@ -7,9 +7,9 @@ namespace GameStore.Repository;
 public class GamesRepository : IGamesRepository
 {
     private const int PageSize = 10;
-    private readonly IGamesDb _db;
+    private readonly GamesDbContext _db;
 
-    public GamesRepository(IGamesDb db)
+    public GamesRepository(GamesDbContext db)
     {
         _db = db;
     }
@@ -17,8 +17,8 @@ public class GamesRepository : IGamesRepository
     public async Task<IEnumerable<Game>> Get(string? category, int page)
     {
         return await _db.Games
-            .Include(g => g.Category)
-            .Where(g => category == null || g.Category.Name == category)
+            .Include(g => g.Genre)
+            .Where(g => category == null || g.Genre.Name == category)
             .Skip(PageSize * (page - 1))
             .Take(PageSize)
             .ToListAsync();
@@ -26,6 +26,6 @@ public class GamesRepository : IGamesRepository
 
     public async Task<IEnumerable<string>> GetCategories()
     {
-        return await _db.Categories.Select(c => c.Name).Distinct().ToListAsync();
+        return await _db.Genres.Select(c => c.Name).Distinct().ToListAsync();
     }
 }

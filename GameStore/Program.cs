@@ -1,10 +1,11 @@
 using GameStore.Data;
 using GameStore.Repository;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<IGamesDb, GameDbSqlite>();
+builder.Services.AddDbContext<GamesDbContext>(d => d.UseSqlServer(builder.Configuration.GetConnectionString("GamesDb")));
 
 builder.Services.AddScoped<IGamesRepository, GamesRepository>();
 

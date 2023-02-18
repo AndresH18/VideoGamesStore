@@ -11,6 +11,6 @@ public class Game
 
     [Required] [Range(1, double.MaxValue)] public double Price { get; set; }
 
-    public int CategoryId { get; set; }
-    public Category Category { get; set; } = default!;
+    public int GenreId { get; set; }
+    public Genre Genre { get; set; } = default!;
 }
