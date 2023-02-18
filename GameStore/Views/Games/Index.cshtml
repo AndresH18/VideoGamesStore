@@ -3,21 +3,31 @@
     ViewData["Title"] = "Games";
 }
 
-<h1>Games</h1>
-
-<div class="container row">
-    <div class="col-3">
-        <form method="get">
-            <div class="form-floating ">
-                <select id="genreFilter" class="form-select">
-                    <option>Hola</option>
-                </select>
-                <label for="genreFilter">Game Genre</label>
-            </div>
-        </form>
+@if (Model.GameGenre == null)
+{
+    <h1>Games</h1>
+}
+else
+{
+    <h1>@Model.GameGenre</h1>
+}
+<div class="container">
+    @* Filter Menu *@
+    <div class="row mb-2">
+        <div class="col-1 dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Genres</button>
+            <ul class="dropdown-menu">
+                @foreach (var genre in Model.GenresSelectList)
+                {
+                    <li>
+                        <a asp-action="Index" asp-route-gameGenre="@genre.Value" class="dropdown-item">@genre.Value</a>
+                    </li>
+                }
+            </ul>
+        </div>
     </div>
 
-    <div class="col">
+    <div class="row">
         <ul class="list-group">
             @foreach (var game in Model.Games)
             {

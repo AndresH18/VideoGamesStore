@@ -17,19 +17,15 @@ public class GamesController : Controller
         _service = service;
     }
 
-    public async Task<IActionResult> Index(int gamePage = 1)
+    public async Task<IActionResult> Index(string? gameGenre, int gamePage = 1)
     {
-        var model = await _service.GetGames(gamePage);
-        
+        _logger.LogDebug("Called Index: Parameters={{gameGenre={genre}, gamePage={page}}}", gameGenre, gamePage);
+        GamesViewModel model;
+        if (string.IsNullOrWhiteSpace(gameGenre))
+            model = await _service.GetGames(gamePage);
+        else
+            model = await _service.GetGames(gameGenre, gamePage);
+
         return View(model);
-    }
-
-    public async Task<IActionResult> Genre(string genre, int gamePage)
-    {
-        if (string.IsNullOrWhiteSpace(genre))
-            return RedirectToAction(nameof(Index));
-
-        return null;
-
     }
 }

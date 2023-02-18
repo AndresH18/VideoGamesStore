@@ -6,7 +6,7 @@
         <a class="btn @(s == ViewBag.Selected ? "btn-primary" : "btn-secondary")"
            asp-controller="Games"
            asp-action="Index"
-           asp-route-genre="@s">
+           asp-route-gameGenre="@s">
             @s.ToUpper()
         </a>
     }

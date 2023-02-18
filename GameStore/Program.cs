@@ -10,6 +10,7 @@ builder.Services.AddDbContext<GamesDbContext>(d =>
     d.UseSqlServer(builder.Configuration.GetConnectionString("GamesDb")));
 
 builder.Services.AddScoped<IGamesRepository, GamesRepository>();
+builder.Services.AddScoped<GamesService>();
 
 
 builder.Services.AddControllersWithViews();
@@ -43,16 +44,25 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Games}/{action=Index}");
 
-app.MapControllerRoute(
-    name: "games",
-    pattern: "{controller=Games}/page{gamePage:int}",
-    defaults: new {Action = "Index", gamePage = 1});
-app.MapControllerRoute(
-    name: "games-category",
-    pattern: "{controller=Games}/{genre}/page{gamePage:int}",
-    defaults: new {Action = "Genre", gamePage = 1});
+// app.MapControllerRoute(name: "game-genres",
+//     pattern: "{gameGenre}",
+//     defaults: new {Controller = "Games", Action = "Index", gamePage = 1});
+
+
+
+// app.MapControllerRoute(name: "game",
+//     pattern: "{controller=Games}/{action=Index}/{gameGenre?}");
+
+// app.MapControllerRoute(
+//     name: "games2",
+//     pattern: "{controller=Games}/page{gamePage:int}",
+//     defaults: new {Action = "Index", gamePage = 1});
+// app.MapControllerRoute(
+//     name: "games-genre",
+//     pattern: "{genre}/page{gamePage:int}",
+//     defaults: new {Action = "Index", gamePage = 1});
 
 app.MapControllers();
 
