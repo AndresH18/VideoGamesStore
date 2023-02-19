@@ -4,7 +4,7 @@ namespace GameStore.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherController : ControllerBase
+public class WeatherApiController : ControllerBase
 {
     [HttpGet]
     public IActionResult Get()

@@ -3,19 +3,12 @@
     ViewData["Title"] = "Games";
 }
 
-@if (Model.GameGenre == null)
-{
-    <h1>Games</h1>
-}
-else
-{
-    <h1>@Model.GameGenre</h1>
-}
-<div class="container">
-    @* Filter Menu *@
-    <div class="row mb-2">
-        <div class="col-1 dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Genres</button>
+
+<div class="container row">
+    @* Menu *@
+    <div class="col-2 mb-2">
+        <div class="row dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">@(Model.GameGenre ?? "Genres")</button>
             <ul class="dropdown-menu">
                 @foreach (var genre in Model.GenresSelectList)
                 {
@@ -27,7 +20,15 @@ else
         </div>
     </div>
 
-    <div class="row">
+    <div class="col">
+        @if (Model.GameGenre == null)
+        {
+            <h1>Games</h1>
+        }
+        else
+        {
+            <h1>@Model.GameGenre</h1>
+        }
         <ul class="list-group">
             @foreach (var game in Model.Games)
             {

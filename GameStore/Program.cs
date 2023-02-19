@@ -9,10 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<GamesDbContext>(d =>
     d.UseSqlServer(builder.Configuration.GetConnectionString("GamesDb")));
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddScoped<IGamesRepository, GamesRepository>();
 builder.Services.AddScoped<GamesService>();
+builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped(SessionCart.GetCart);
 
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -41,6 +47,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
+
 
 app.MapControllerRoute(
     name: "default",

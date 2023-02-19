@@ -1,0 +1,31 @@
+﻿@model Cart
+
+<h2>Your Cart</h2>
+
+<table class="table table-rounded table-striped">
+    <thead>
+    <tr>
+        <th>Item</th><th>Quantity</th><th class="text-end">Price</th><th class="text-end">Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var cartItem in Model.CartItems)
+    {
+        <tr>
+            <td class="text-start">@cartItem.Game.Name</td>
+            <td class="text-start">@cartItem.Quantity</td>
+            <td class="text-end">@cartItem.Game.Price.ToString("C")</td>
+            <td class="text-end">@((cartItem.Quantity * cartItem.Game.Price).ToString("C"))</td>
+            <td class="text-center">
+                <form method="post" asp-action="RemoveGame">
+                    <input type="hidden" asp-for="@cartItem.Game.Id"/>
+                    @* <input type="hidden" name="returnUrl" value="@Model?.ReturnUrl"/> *@
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Remove
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
