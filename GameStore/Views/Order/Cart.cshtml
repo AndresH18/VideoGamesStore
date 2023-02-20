@@ -39,6 +39,10 @@
 
 <div class="text-center">
     <a href="@Model.ReturnUrl" class="btn btn-primary">Continue Shopping</a>
-    <a  class="btn btn-secondary" asp-action="Checkout">CheckOut</a>
+    @if (Model.Cart.CartItems.Any())
+    {
+        <a class="btn btn-secondary" asp-action="Checkout">CheckOut</a>
+    }
+
 
 </div>
