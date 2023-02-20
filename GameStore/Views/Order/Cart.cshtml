@@ -1,7 +1,7 @@
-﻿@model Cart
+﻿@model CartViewModel
 
 <h2>Your Cart</h2>
-
+@* Items Table *@
 <table class="table table-rounded table-striped">
     <thead>
     <tr>
@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var cartItem in Model.CartItems)
+    @foreach (var cartItem in Model.Cart.CartItems)
     {
         <tr>
             <td class="text-start">@cartItem.Game.Name</td>
@@ -19,7 +19,7 @@
             <td class="text-center">
                 <form method="post" asp-action="RemoveGame">
                     <input type="hidden" asp-for="@cartItem.Game.Id"/>
-                    @* <input type="hidden" name="returnUrl" value="@Model?.ReturnUrl"/> *@
+                    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl"/>
                     <button type="submit" class="btn btn-sm btn-danger">
                         Remove
                     </button>
@@ -28,4 +28,17 @@
         </tr>
     }
     </tbody>
+
+    <tfoot>
+    <tr>
+        <td class="text-center" colspan="3">Total</td>
+        <td class="text-end">@Model.Cart.ComputeTotalValue().ToString("C")</td>
+    </tr>
+    </tfoot>
 </table>
+
+<div class="text-center">
+    <a href="@Model.ReturnUrl" class="btn btn-primary">Continue Shopping</a>
+    <a  class="btn btn-secondary" asp-action="Checkout">CheckOut</a>
+
+</div>

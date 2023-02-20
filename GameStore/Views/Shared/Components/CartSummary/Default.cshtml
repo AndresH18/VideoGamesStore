@@ -1,7 +1,7 @@
 ﻿@model Cart
 
 <div>
-    <a class="btn btn-sm btn-secondary" asp-controller="Cart" asp-action="Index">
+    <a class="btn btn-sm btn-secondary" asp-controller="Order" asp-action="Cart">
         @if (Model.CartItems.Any())
         {
             <small class="navbar-text">

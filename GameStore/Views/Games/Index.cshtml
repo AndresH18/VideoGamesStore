@@ -5,11 +5,15 @@
 
 
 <div class="container row">
-    @* Menu *@
+    @* Filter Menu *@
     <div class="col-2 mb-2">
+        @* Genres Menu *@
         <div class="row dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">@(Model.GameGenre ?? "Genres")</button>
             <ul class="dropdown-menu">
+                <li>
+                    <a asp-action="Index" class="dropdown-item">Select</a>
+                </li>
                 @foreach (var genre in Model.GenresSelectList)
                 {
                     <li>
@@ -29,6 +33,7 @@
         {
             <h1>@Model.GameGenre</h1>
         }
+        @* Games List *@
         <ul class="list-group">
             @foreach (var game in Model.Games)
             {
@@ -38,4 +43,6 @@
             }
         </ul>
     </div>
+
+    @* Pagination *@
 </div>
