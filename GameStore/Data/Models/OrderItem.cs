@@ -15,7 +15,7 @@ public class OrderItem
         Quantity = cartItem.Quantity;
     }
 
-    [Key] public int Id { get; set; }
+    [Key] public ulong Id { get; set; }
 
     public int OrderId { get; set; }
 
@@ -24,6 +24,6 @@ public class OrderItem
     public double Price { get; set; }
 
     public int Quantity { get; set; }
-
+    
     public Order? Order { get; set; }
 }

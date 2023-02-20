@@ -4,6 +4,7 @@ using GameStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.Migrations
 {
     [DbContext(typeof(GamesDbContext))]
-    partial class GamesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230220225323_Created_Order_And_OrderItem")]
+    partial class Created_Order_And_OrderItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
