@@ -62,7 +62,7 @@ public class OrderController : Controller
 
 
     [HttpPost]
-    public IActionResult Checkout(Order order)
+    public async Task<IActionResult> Checkout(Order order)
     {
         // if (!_cart.CartItems.Any())
         //     ModelState.AddModelError("", "Sorry, your cart is Empty!");
@@ -81,12 +81,13 @@ public class OrderController : Controller
 
         // order.Items = _cart.CartItems;
         // TODO: view if method should return null
-        order = _service.SaveOrder(order, _cart);
+        order = await _service.SaveOrder(order, _cart);
         _cart.Clear();
         return RedirectToAction(nameof(Completed), new {orderId = order.Id});
     }
 
-    public void Completed()
+    public IActionResult Completed(int orderId)
     {
+        return View(orderId);
     }
 }

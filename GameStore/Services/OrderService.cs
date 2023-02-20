@@ -17,10 +17,10 @@ public class OrderService
         return _repo.GetGame(gameId);
     }
 
-    public Order SaveOrder(Order order, Cart cart)
+    public async Task<Order> SaveOrder(Order order, Cart cart)
     {
         order.OrderItems = cart.CartItems.Select(g => new OrderItem(g)).ToList();
-        _repo.SaveOrder(order);
+        await _repo.SaveOrder(order);
         return order;
     }
 }

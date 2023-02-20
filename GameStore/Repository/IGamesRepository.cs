@@ -12,5 +12,5 @@ public interface IGamesRepository
     public Task<IEnumerable<Game>> GetGamesByGenre(string genre, int pageSize);
     public Task<IEnumerable<Genre>> GetGenres();
 
-    public Order SaveOrder(Order order);
+    public Task<Order> SaveOrder(Order order);
 }

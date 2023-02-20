@@ -34,7 +34,7 @@ public class GamesDbContext : DbContext
         //     .WithOne(ot => ot.Order)
         //     .IsRequired();
 
-            modelBuilder.Entity<Genre>().HasData(
+        modelBuilder.Entity<Genre>().HasData(
             new Genre {Id = 1, Name = "Metroid-vania"},
             new Genre {Id = 2, Name = "Puzzle"},
             new Genre {Id = 3, Name = "First Person Shooter"});
