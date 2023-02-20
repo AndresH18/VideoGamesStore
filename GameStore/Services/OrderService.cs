@@ -3,11 +3,11 @@ using GameStore.Repository;
 
 namespace GameStore.Services;
 
-public class CartService
+public class OrderService
 {
     private readonly IGamesRepository _repo;
 
-    public CartService(IGamesRepository repo)
+    public OrderService(IGamesRepository repo)
     {
         _repo = repo;
     }
@@ -17,9 +17,10 @@ public class CartService
         return _repo.GetGame(gameId);
     }
 
-    public Order SaveOrder(Order order)
+    public Order SaveOrder(Order order, Cart cart)
     {
-        // TODO: save order
+        order.OrderItems = cart.CartItems.Select(g => new OrderItem(g)).ToList();
+        _repo.SaveOrder(order);
         return order;
     }
 }

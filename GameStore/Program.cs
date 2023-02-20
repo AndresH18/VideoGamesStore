@@ -13,7 +13,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<IGamesRepository, GamesRepository>();
 builder.Services.AddScoped<GamesService>();
-builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped(SessionCart.GetCart);
 
 

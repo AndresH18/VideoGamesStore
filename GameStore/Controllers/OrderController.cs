@@ -7,11 +7,11 @@ namespace GameStore.Controllers;
 
 public class OrderController : Controller
 {
-    private readonly CartService _service;
+    private readonly OrderService _service;
 
     private readonly Cart _cart;
 
-    public OrderController(CartService service, Cart cart)
+    public OrderController(OrderService service, Cart cart)
     {
         _service = service;
         _cart = cart;
@@ -57,22 +57,31 @@ public class OrderController : Controller
 
     public IActionResult Checkout()
     {
-        return View();
+        return View(new Order());
     }
 
 
     [HttpPost]
     public IActionResult Checkout(Order order)
     {
-        if (!_cart.CartItems.Any())
-            ModelState.AddModelError("", "Sorry, your cart is Empty!");
+        // if (!_cart.CartItems.Any())
+        //     ModelState.AddModelError("", "Sorry, your cart is Empty!");
+        //
+        // if (!ModelState.IsValid)
+        //     return View();
 
-        if (!ModelState.IsValid)
+        // if (!ModelState.IsValid || !_cart.CartItems.Any())
+        if (!(ModelState.IsValid && _cart.CartItems.Any()))
+        {
+            if (!_cart.CartItems.Any())
+                ModelState.AddModelError("", "Sorry, your cart is Empty!");
+
             return View();
+        }
 
-        order.Items = _cart.CartItems;
+        // order.Items = _cart.CartItems;
         // TODO: view if method should return null
-        order = _service.SaveOrder(order);
+        order = _service.SaveOrder(order, _cart);
         _cart.Clear();
         return RedirectToAction(nameof(Completed), new {orderId = order.Id});
     }

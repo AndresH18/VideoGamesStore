@@ -65,4 +65,10 @@ public class GamesRepository : IGamesRepository
     {
         return await _db.Genres.ToListAsync();
     }
+
+    public Order SaveOrder(Order order)
+    {
+        // TODO : Save order
+        return order;
+    }
 }
