@@ -1,4 +1,3 @@
-using GameStore.Controllers;
 using GameStore.Data;
 using GameStore.Repository;
 using GameStore.Services;
@@ -16,7 +15,7 @@ builder.Services.AddDbContext<UsersContext>(d =>
 
 // builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //     .AddEntityFrameworkStores<UsersContext>();
-builder.Services.AddIdentity<GameStoreUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<GameStoreUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<UsersContext>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

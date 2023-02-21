@@ -1,7 +1,7 @@
-﻿@model LoginViewModel
+﻿@model RegisterViewModel
 
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "Register";
     Layout = "_Layout";
 }
 
@@ -9,7 +9,7 @@
 <div class="m-1 p-1">
     <div class="text-danger" asp-validation-summary="All"></div>
 
-    <form asp-action="Login" method="post">
+    <form asp-action="Register" method="post">
         <input type="hidden" asp-for="ReturnUrl">
         <div class="form-floating mb-3">
             <input type="email" class="form-control" placeholder="name@exmaple.com" asp-for="UserName">
@@ -21,8 +21,7 @@
         </div>
 
         <div class="mt-5 d-grid gap-2 col-6 mx-auto">
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a class="btn btn-secondary" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
+            <button type="submit" class="btn btn-primary">Register</button>
         </div>
     </form>
 
