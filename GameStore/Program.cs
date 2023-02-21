@@ -1,6 +1,8 @@
+using GameStore.Controllers;
 using GameStore.Data;
 using GameStore.Repository;
 using GameStore.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,9 @@ builder.Services.AddDbContext<GamesDbContext>(d =>
 builder.Services.AddDbContext<UsersContext>(d =>
     d.UseSqlServer(builder.Configuration.GetConnectionString("UsersDb")));
 
-builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
+// builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//     .AddEntityFrameworkStores<UsersContext>();
+builder.Services.AddIdentity<GameStoreUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<UsersContext>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -30,7 +34,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthentication();
+
+// builder.Services.ConfigureApplicationCookie(option =>
+// {
+//     option.LoginPath = new PathString("/Account/Login"); // Use this when you use AddDefaultIdentity, Because it sets the default login route
+// });
 
 var app = builder.Build();
 
