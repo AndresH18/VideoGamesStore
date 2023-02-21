@@ -1,10 +1,12 @@
 ﻿using GameStore.Data.Models;
 using GameStore.Data.ViewModels;
 using GameStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameStore.Controllers;
 
+[Authorize]
 public class OrderController : Controller
 {
     private readonly OrderService _service;

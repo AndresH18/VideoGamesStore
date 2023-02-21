@@ -2,7 +2,6 @@ using GameStore.Data;
 using GameStore.Repository;
 using GameStore.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<GamesDbContext>(d =>
     d.UseSqlServer(builder.Configuration.GetConnectionString("GamesDb")));
 
-builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<GameStoreContext>();
+builder.Services.AddDbContext<UsersContext>(d =>
+    d.UseSqlServer(builder.Configuration.GetConnectionString("UsersDb")));
+
+builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<UsersContext>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -61,7 +64,6 @@ app.MapControllerRoute(
 // app.MapControllerRoute(name: "game-genres",
 //     pattern: "{gameGenre}",
 //     defaults: new {Controller = "Games", Action = "Index", gamePage = 1});
-
 
 
 // app.MapControllerRoute(name: "game",
