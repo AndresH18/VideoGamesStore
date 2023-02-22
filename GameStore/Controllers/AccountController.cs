@@ -1,4 +1,5 @@
 ﻿using GameStore.Data;
+using GameStore.Data.Identity;
 using GameStore.Data.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public class AccountController : Controller
         _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
     }
 
-    public ViewResult Login(string returnUrl)
+    public ViewResult Login(string returnUrl = "/")
     {
         return View(new LoginViewModel {ReturnUrl = returnUrl});
     }
@@ -44,7 +45,7 @@ public class AccountController : Controller
         return View(model);
     }
 
-    public async Task<ViewResult> Register(string returnUrl = "/")
+    public ViewResult Register(string returnUrl = "/")
     {
         return View(new RegisterViewModel {ReturnUrl = returnUrl});
     }
@@ -60,10 +61,26 @@ public class AccountController : Controller
 
             if (result.Succeeded)
                 return RedirectToAction(nameof(Login));
+            else
+                AddModelErrors(result.Errors);
+        }
+        else
+        {
+            ModelState.AddModelError("", "Invalid Username or Password");
         }
 
-        ModelState.AddModelError("", "Invalid Fields");
-
         return View(model);
+    }
+
+
+    private void AddModelErrors(IEnumerable<IdentityError> errors)
+    {
+        foreach (var error in errors)
+        {
+            if (error.Code is ("DuplicateUserName" or "DuplicateEmail"))
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+        }
     }
 }
