@@ -18,7 +18,7 @@ builder.Services.AddDbContext<UsersContext>(d =>
 //     .AddEntityFrameworkStores<UsersContext>();
 builder.Services.AddIdentity<GameStoreUser, IdentityRole>(options =>
     {
-        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedAccount = true;
         options.User.RequireUniqueEmail = true;
     })
     .AddEntityFrameworkStores<UsersContext>();

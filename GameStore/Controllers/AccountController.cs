@@ -56,7 +56,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = new GameStoreUser {UserName = model.UserName, Email = model.UserName};
+            var user = new GameStoreUser {UserName = model.UserName, Email = model.UserName, EmailConfirmed = true};
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
