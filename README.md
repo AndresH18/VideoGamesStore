@@ -1,5 +1,12 @@
 ﻿# Video Game Store
 
+This proyect uses the [Identity Framework](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-7.0&tabs=visual-studio).  
+To update the datbases, run:
+```
+dotnet ef database update -c UsersContext 
+dotnet ef database update -c GamesDbContext 
+```
+
 ### Install Libman
 
 Verify if Libman is installed
