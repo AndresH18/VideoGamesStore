@@ -1,7 +1,7 @@
 ﻿# Video Game Store
 
 ## Entity Framework
-This proyect uses the [Identity Framework](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-7.0&tabs=visual-studio).  
+This proyect uses the [Identity Framework](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-7.0&tabs=visual-studio), to manage interactions with the database.
 To update the datbases, run:
 ```
 dotnet ef database update -c UsersContext 
