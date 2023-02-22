@@ -1,10 +1,19 @@
 ﻿# Video Game Store
 
+## DbContext
 This proyect uses the [Identity Framework](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-7.0&tabs=visual-studio).  
 To update the datbases, run:
 ```
 dotnet ef database update -c UsersContext 
 dotnet ef database update -c GamesDbContext 
+```
+### Migrations
+To create more migrations, use:
+```
+# For UsersContext
+dotnet ef migrations add <migration-name> -o Data\Migrations\Identity -c UsersContext
+# For GamesDbContext
+dotnet ef migrations add <migration-name> -o Data\Migrations -c GamesDbContext
 ```
 
 ### Install Libman
