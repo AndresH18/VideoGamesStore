@@ -1,6 +1,6 @@
 ﻿# Video Game Store
 
-## DbContext
+## Entity Framework
 This proyect uses the [Identity Framework](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-7.0&tabs=visual-studio).  
 To update the datbases, run:
 ```
