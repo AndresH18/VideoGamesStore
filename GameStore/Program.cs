@@ -4,6 +4,7 @@ using GameStore.Repository;
 using GameStore.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ApplicationUser = GameStore.Data.Identity.ApplicationUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<UsersContext>(d =>
 
 // builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //     .AddEntityFrameworkStores<UsersContext>();
-builder.Services.AddIdentity<GameStoreUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
         options.User.RequireUniqueEmail = true;

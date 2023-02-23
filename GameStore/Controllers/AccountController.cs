@@ -9,10 +9,10 @@ namespace GameStore.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly UserManager<GameStoreUser> _userManager;
-    private readonly SignInManager<GameStoreUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public AccountController(UserManager<GameStoreUser> userManager, SignInManager<GameStoreUser> signInManager)
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
@@ -59,7 +59,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = new GameStoreUser {UserName = model.UserName, Email = model.UserName, EmailConfirmed = true};
+            var user = new ApplicationUser {UserName = model.UserName, Email = model.UserName, EmailConfirmed = true};
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)

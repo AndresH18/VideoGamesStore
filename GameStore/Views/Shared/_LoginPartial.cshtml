@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using GameStore.Data.Identity
 
-@inject SignInManager<GameStoreUser> SignInManager
-@inject UserManager<GameStoreUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 <div>
     @if (SignInManager.IsSignedIn(User))
