@@ -27,9 +27,11 @@ public static class IdentityInitializer
             {
                 // get configuration to use AdminCredentials
                 var config = serviceProvider.GetRequiredService<IConfiguration>();
+                // view if admin user exists
                 adminUser = await userManager.FindByEmailAsync(config["AdminCredentials:Email"]);
                 if (adminUser == null)
                 {
+                    // create admin user
                     adminUser = new ApplicationUser
                     {
                         UserName = config["AdminCredentials:UserName"],
