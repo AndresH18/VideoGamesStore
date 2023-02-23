@@ -18,9 +18,12 @@ public class AccountController : Controller
         _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
     }
 
-    public ViewResult Login(string returnUrl = "/")
+    public IActionResult Login(string returnUrl = "/")
     {
-        return View(new LoginViewModel {ReturnUrl = returnUrl});
+        if (!_signInManager.IsSignedIn(User))
+            return View(new LoginViewModel {ReturnUrl = returnUrl});
+        
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
@@ -61,8 +64,8 @@ public class AccountController : Controller
 
             if (result.Succeeded)
                 return RedirectToAction(nameof(Login));
-            else
-                AddModelErrors(result.Errors);
+
+            AddModelErrors(result.Errors);
         }
         else
         {
@@ -70,6 +73,13 @@ public class AccountController : Controller
         }
 
         return View(model);
+    }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        // return Redirect(returnUrl);
+        return RedirectToAction(nameof(Login));
     }
 
 

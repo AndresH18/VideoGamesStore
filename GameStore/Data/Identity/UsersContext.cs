@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Data.Identity;
 
-public class UsersContext : IdentityDbContext<GameStoreUser>
+public class UsersContext : IdentityDbContext<GameStoreUser, IdentityRole, string>
 {
     public UsersContext(DbContextOptions<UsersContext> options)
         : base(options)
