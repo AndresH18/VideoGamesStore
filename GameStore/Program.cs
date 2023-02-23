@@ -17,12 +17,13 @@ builder.Services.AddDbContext<UsersContext>(d =>
 
 // builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //     .AddEntityFrameworkStores<UsersContext>();
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
-        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedAccount = true;
         options.User.RequireUniqueEmail = true;
     })
-    .AddEntityFrameworkStores<UsersContext>();
+    .AddEntityFrameworkStores<UsersContext>()
+    .AddRoleManager<RoleManager<ApplicationRole>>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -49,6 +50,7 @@ builder.Services.AddAuthentication();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -60,6 +62,15 @@ else
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    #region Seed DB Data
+
+    using (var scope = app.Services.CreateScope())
+    {
+       await IdentityInitializer.Initialize(scope.ServiceProvider);
+    }
+
+    #endregion
 }
 
 app.UseHttpsRedirection();

@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GameStore.Data.Identity;
 
-public class UsersContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
-    ApplicationUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
+public class UsersContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, IdentityUserClaim<Guid>,
+    ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
     public UsersContext(DbContextOptions<UsersContext> options)
         : base(options)
@@ -44,14 +45,15 @@ public class UsersContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
             //     .WithOne()
             //     .HasForeignKey(ur => ur.UserId)
             //     .IsRequired();
-            
+
+
             // Each User can have many entries in the UserRole join table
             b.HasMany(e => e.UserRoles)
                 .WithOne(e => e.User)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
         });
-        
+
         builder.Entity<ApplicationRole>(b =>
         {
             // Each Role can have many entries in the UserRole join table
@@ -61,4 +63,5 @@ public class UsersContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
                 .IsRequired();
         });
     }
+    
 }
