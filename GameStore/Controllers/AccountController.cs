@@ -22,7 +22,7 @@ public class AccountController : Controller
     {
         if (!_signInManager.IsSignedIn(User))
             return View(new LoginViewModel {ReturnUrl = returnUrl});
-        
+
         return RedirectToAction("Index", "Home");
     }
 
@@ -59,7 +59,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = new ApplicationUser {UserName = model.UserName, Email = model.UserName, EmailConfirmed = true};
+            var user = new ApplicationUser {UserName = model.UserName, Email = model.UserName};
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -87,10 +87,7 @@ public class AccountController : Controller
     {
         foreach (var error in errors)
         {
-            if (error.Code is ("DuplicateUserName" or "DuplicateEmail"))
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
+            ModelState.AddModelError(error.Code, error.Description);
         }
     }
 }
