@@ -11,7 +11,7 @@
             <button class="btn btn-info" type="button" data-bs-toggle="dropdown" aria-expanded="false">@UserManager.GetUserName(User)</button>
             <ul class="dropdown-menu">
                 <li class="dropdown-item">
-                <vc:cart-summary/>
+                    <vc:cart-summary/>
                 </li>
                 <li>
                     <hr class="dropdown-divider">
@@ -35,11 +35,7 @@
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" id="register" asp-controller="Account" asp-action="Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" id="login" asp-controller="Account" asp-action="Login">Login</a>
-        </li>
+        <a class="btn btn-primary" id="login" asp-controller="Account" asp-action="Login">Login</a>
+        <a class="btn btn-outline-primary" id="register" asp-controller="Account" asp-action="Register">Register</a>
     }
 </div>
