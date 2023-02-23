@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Data.Identity;
 
-public class UsersContext : IdentityDbContext<ApplicationUser>
+public class UsersContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
+    ApplicationUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
 {
     public UsersContext(DbContextOptions<UsersContext> options)
         : base(options)
@@ -17,7 +18,7 @@ public class UsersContext : IdentityDbContext<ApplicationUser>
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
-        
+
         builder.Entity<ApplicationUser>(b =>
         {
             // Each User can have many UserClaims
@@ -39,9 +40,24 @@ public class UsersContext : IdentityDbContext<ApplicationUser>
                 .IsRequired();
 
             // Each User can have many entries in the UserRole join table
+            // b.HasMany(e => e.UserRoles)
+            //     .WithOne()
+            //     .HasForeignKey(ur => ur.UserId)
+            //     .IsRequired();
+            
+            // Each User can have many entries in the UserRole join table
             b.HasMany(e => e.UserRoles)
-                .WithOne()
+                .WithOne(e => e.User)
                 .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+        });
+        
+        builder.Entity<ApplicationRole>(b =>
+        {
+            // Each Role can have many entries in the UserRole join table
+            b.HasMany(e => e.UserRoles)
+                .WithOne(e => e.Role)
+                .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
         });
     }
