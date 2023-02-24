@@ -1,0 +1,69 @@
+﻿@using GameStore.Data.Identity
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/GameStore.styles.css" asp-append-version="true"/>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+</head>
+
+<body>
+<header class="bg-info text-white">
+    <nav class="navbar navbar-expand-sm border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand">@nameof(GameStore) Administration</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    @* Navigation Items *@
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Admin" asp-action="Index">Games</a>
+                    </li>
+                </ul>
+                <div class="dropdown pe-4">
+                    <button class="btn btn-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">@UserManager.GetUserName(User)</button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item text-decoration-none" asp-action="Index" asp-controller="Games">Go to Store</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form id="logoutForm" class="dropdown-item form-inline" asp-action="Logout">
+                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                            </form>
+                            @* <a class="dropdown-item form-inline nav-link btn btn-link text-dark border-0 text-decoration-none" asp-action="Logout">Logout</a> *@
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid row">
+
+    <div class="p-2 col-3 d-grid gap-1">
+        @* navigation items*@
+    </div>
+
+    <div class="col">
+        @RenderBody()
+    </div>
+</div>
+
+</body>
+</html>

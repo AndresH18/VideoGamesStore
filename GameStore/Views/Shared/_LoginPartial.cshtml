@@ -7,15 +7,20 @@
 <div>
     @if (SignInManager.IsSignedIn(User))
     {
-        <div class="dropdown">
+        <div class="dropdown pe-4">
             <button class="btn btn-info" type="button" data-bs-toggle="dropdown" aria-expanded="false">@UserManager.GetUserName(User)</button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-end">
+                @if (User.IsInRole("admin"))
+                {
+                    <li>
+                        <a class="dropdown-item text-decoration-none" asp-action="Index" asp-controller="Admin">Admin</a>
+                    </li>
+                    <hr class="dropdown-divider"/>
+                }
                 <li class="dropdown-item">
                     <vc:cart-summary/>
                 </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
+                <hr class="dropdown-divider">
                 <li>
                     <form id="logoutForm" class="dropdown-item form-inline" asp-action="Logout" asp-controller="Account">
                         <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>

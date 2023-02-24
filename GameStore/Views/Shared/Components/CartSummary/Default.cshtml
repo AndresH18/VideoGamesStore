@@ -5,12 +5,7 @@
        asp-controller="Order"
        asp-action="Cart"
        asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
-        <div>
-            <button
-                class="nav-link btn btn-link text-dark border-0">
-                Your Cart
-            </button>
-        </div>
+        <div class="nav-link btn btn-link text-dark border-0 text-start">Your Cart</div>
         @if (Model.CartItems.Any())
         {
             <div>
