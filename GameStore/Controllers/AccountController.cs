@@ -78,6 +78,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
+        
         // return Redirect(returnUrl);
         return RedirectToAction(nameof(Login));
     }
