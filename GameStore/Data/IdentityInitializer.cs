@@ -44,6 +44,10 @@ public static class IdentityInitializer
                     }
                 }
             }
+            
+            // crate user role
+            var userRole = new ApplicationRole("user");
+            result = await roleManager.CreateAsync(userRole);
         }
     }
 #pragma warning restore CS8604
