@@ -18,7 +18,7 @@
                     <hr class="dropdown-divider"/>
                 }
                 <li class="dropdown-item">
-                    <vc:cart-summary/>
+                    @await Component.InvokeAsync("CartSummary")
                 </li>
                 <hr class="dropdown-divider">
                 <li>
