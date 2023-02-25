@@ -5,10 +5,9 @@ namespace GameStore.Controllers;
 
 public class AdminController : Controller
 {
+    private readonly IAdminRepository _repo;
 
-    private readonly AdminRepository _repo;
-
-    public AdminController(AdminRepository repo)
+    public AdminController(IAdminRepository repo)
     {
         _repo = repo;
     }
@@ -16,7 +15,16 @@ public class AdminController : Controller
     // GET
     public IActionResult Index(string? activeNav)
     {
-        
         return View();
+    }
+
+    public IActionResult Users()
+    {
+        return View(nameof(Index));
+    }
+
+    public IActionResult Orders()
+    {
+        return View(nameof(Index));
     }
 }
