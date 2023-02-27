@@ -12,11 +12,11 @@
     <form asp-action="Login" method="post">
         <input type="hidden" asp-for="ReturnUrl">
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" placeholder="name@exmaple.com" asp-for="UserName">
-            <label asp-for="UserName">Email Address</label>
+            <input type="email" class="form-control" placeholder="name@exmaple.com" asp-for="Email" autocomplete="email">
+            <label asp-for="Email">Email Address</label>
         </div>
         <div class="form-floating">
-            <input type="password" class="form-control" placeholder="Password" asp-for="Password">
+            <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="current-password">
             <label asp-for="Password">Password</label>
         </div>
 

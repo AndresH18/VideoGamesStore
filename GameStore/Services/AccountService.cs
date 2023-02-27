@@ -23,9 +23,9 @@ public class AccountService
         _cart = cart;
     }
 
-    public async Task<SignInResult> Login(string username, string password)
+    public async Task<SignInResult> Login(string email, string password)
     {
-        var user = await _userManager.FindByEmailAsync(username);
+        var user = await _userManager.FindByEmailAsync(email);
         if (user != null)
         {
             await Logout();
@@ -45,9 +45,13 @@ public class AccountService
     {
         var user = new ApplicationUser
         {
-            UserName = registerModel.UserName, Email = registerModel.UserName
+            UserName = registerModel.UserName, Email = registerModel.Email
         };
-        return await _userManager.CreateAsync(user, registerModel.Password);
+        var result = await _userManager.CreateAsync(user, registerModel.Password);
+        if (result.Succeeded)
+            await _userManager.AddToRoleAsync(user, "user");
+
+        return result;
     }
 
     public bool IsSignedIn(ClaimsPrincipal user)

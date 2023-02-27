@@ -11,18 +11,22 @@
 
     <form asp-action="Register" method="post">
         <input type="hidden" asp-for="ReturnUrl">
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" placeholder="name@exmaple.com" asp-for="UserName">
-            <label asp-for="UserName">Email Address</label>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Password">Username</label>
+            <input type="text" class="form-control" asp-for="UserName" placeholder="Username" autocomplete="off">
         </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" placeholder="Password" asp-for="Password">
-            <label asp-for="Password">Password</label>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Email">Email address</label>
+            <input type="email" class="form-control" asp-for="Email" aria-describedby="emailHelp" placeholder="name@exmaple.com" autocomplete="username">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone.</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Password">Password</label>
+            <input type="password" class="form-control" asp-for="Password" placeholder="Your Password" autocomplete="new-password">
         </div>
 
-        <div class="mt-5 d-grid gap-2 col-6 mx-auto">
-            <button type="submit" class="btn btn-primary">Register</button>
+        <div class="mt-5 d-grid col-6 mx-auto">
+            <button type="submit" class="btn btn-primary" id="registerButton">Register</button>
         </div>
     </form>
-
 </div>

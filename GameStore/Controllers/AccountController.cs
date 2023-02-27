@@ -31,7 +31,7 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-        if ((await _accountService.Login(model.UserName, model.Password)).Succeeded)
+        if ((await _accountService.Login(model.Email, model.Password)).Succeeded)
         {
             return Redirect(model.ReturnUrl ?? "/");
         }
