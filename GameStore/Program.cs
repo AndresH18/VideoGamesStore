@@ -2,6 +2,7 @@ using GameStore.Data;
 using GameStore.Data.Identity;
 using GameStore.Repository;
 using GameStore.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ApplicationUser = GameStore.Data.Identity.ApplicationUser;
@@ -45,10 +46,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthentication();
 
-// builder.Services.ConfigureApplicationCookie(option =>
-// {
+builder.Services.ConfigureApplicationCookie(options =>
+{
 //     option.LoginPath = new PathString("/Account/Login"); // Use this when you use AddDefaultIdentity, Because it sets the default login route
-// });
+// // Use this to configure how to deal with situations in which the user is redirected to Access Denied (code 403)
+    // options.Events = new CookieAuthenticationEvents
+    // {
+    //     OnRedirectToAccessDenied = c =>
+    //     {
+    //         c.Response.StatusCode = 403;
+    //         return Task.FromResult(0);
+    //     }
+    // };
+});
 
 var app = builder.Build();
 
@@ -69,7 +79,7 @@ else
 
     using (var scope = app.Services.CreateScope())
     {
-       await IdentityInitializer.Initialize(scope.ServiceProvider);
+        await IdentityInitializer.Initialize(scope.ServiceProvider);
     }
 
     #endregion

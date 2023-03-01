@@ -37,4 +37,29 @@ public class AdminRepository : IAdminRepository
             }
         };
     }
+
+    public async Task<ListViewModel<ApplicationUser>> GetUsers(int pageIndex)
+    {
+        if (pageIndex <= 0)
+            return new ListViewModel<ApplicationUser>();
+
+        var totalUsers = await _usersContext.Users.CountAsync();
+        var users = await _usersContext.Users
+            .Skip(PageSize * (pageIndex - 1))
+            .Take(PageSize)
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .ToListAsync();
+
+        return new ListViewModel<ApplicationUser>
+        {
+            Items = users,
+            PageInfo = new PageInfo
+            {
+                TotalItems = (uint) totalUsers,
+                CurrentPage = (uint) pageIndex,
+                ItemsPerPage = PageSize
+            }
+        };
+    }
 }

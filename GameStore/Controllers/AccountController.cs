@@ -74,7 +74,6 @@ public class AccountController : Controller
         return RedirectToAction(nameof(Login));
     }
 
-
     private void AddModelErrors(IEnumerable<IdentityError> errors)
     {
         foreach (var error in errors)
