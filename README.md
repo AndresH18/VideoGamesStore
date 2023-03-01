@@ -36,6 +36,8 @@ dotnet tool install --global Microsoft.Web.librarymManager.Cli --version 2.1.175
 
 ## CSS Libraries
 
+This proyect uses some external css libraries that are not stored on the repo. To use them, do:
+
 ### Restore
 
 If *libman.json* is found on the project directory, run:
