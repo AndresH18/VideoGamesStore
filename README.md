@@ -31,7 +31,7 @@ microsoft.web.librarymanager.cli      2.1.175      libman
 If it's not installed run:
 
 ```ps
-dotnet tool install --global Microsoft.Web.librarymManager.Cli --version 2.1.175
+dotnet tool install --global Microsoft.Web.libraryManager.Cli --version 2.1.175
 ```
 
 ## CSS Libraries
