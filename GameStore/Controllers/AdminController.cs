@@ -36,6 +36,17 @@ public class AdminController : Controller
             : View(nameof(Users));
     }
 
+    // public async Task<RedirectResult> VerifyUser(Guid userId, string returnUrl = "Users")
+    // {
+    //     await _repo.VerifyUser(userId);
+    //     return Redirect(returnUrl);
+    // }
+    public async Task<RedirectResult> DeleteUser(Guid userId, string returnUrl = nameof(Users))
+    {
+        await _repo.DeleteUser(userId, User);
+        return Redirect(returnUrl);
+    }
+
     [HttpPost]
     public async Task<IActionResult> EditUser(UserViewModel model)
     {
@@ -54,6 +65,11 @@ public class AdminController : Controller
     }
 
     public IActionResult Orders()
+    {
+        return View(nameof(Index));
+    }
+
+    public IActionResult Products()
     {
         return View(nameof(Index));
     }

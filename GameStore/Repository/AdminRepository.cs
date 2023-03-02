@@ -1,4 +1,5 @@
-﻿using GameStore.Data;
+﻿using System.Security.Claims;
+using GameStore.Data;
 using GameStore.Data.Identity;
 using GameStore.Data.Models;
 using GameStore.Data.ViewModels;
@@ -14,13 +15,15 @@ public class AdminRepository : IAdminRepository
     private readonly UsersContext _usersContext;
     private readonly GamesDbContext _gamesContext;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
     public AdminRepository(UsersContext usersContext, GamesDbContext gamesContext,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _usersContext = usersContext;
         _gamesContext = gamesContext;
         _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     public async Task<ListViewModel<Game>> GetProducts(int pageIndex)
@@ -75,6 +78,30 @@ public class AdminRepository : IAdminRepository
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Id == userId);
+    }
+
+    public async Task<IdentityResult> DeleteUser(Guid userId, ClaimsPrincipal currentUser)
+    {
+        if (_userManager.GetUserId(currentUser) != userId.ToString())
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return IdentityResult.Failed();
+
+            return await _userManager.DeleteAsync(user);
+        }
+        return IdentityResult.Failed(new IdentityError {Description = "Cannot delete current user"});
+    }
+
+    public async Task<IdentityResult> VerifyUser(Guid userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null)
+            return IdentityResult.Failed();
+
+        user.EmailConfirmed = true;
+
+        return await _userManager.UpdateAsync(user);
     }
 
     public async Task<IdentityResult> UpdateUser(UserViewModel model)

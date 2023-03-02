@@ -1,4 +1,5 @@
-﻿using GameStore.Data.Identity;
+﻿using System.Security.Claims;
+using GameStore.Data.Identity;
 using GameStore.Data.Models;
 using GameStore.Data.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -27,4 +28,7 @@ public interface IAdminRepository
     public Task<ApplicationUser?> GetUser(Guid userId);
 
     public Task<IdentityResult> UpdateUser(UserViewModel userModel);
+    public Task<IdentityResult> DeleteUser(Guid userId, ClaimsPrincipal currentUser);
+
+    // public Task<IdentityResult> VerifyUser(Guid userid);
 }
