@@ -42,12 +42,14 @@ public static class IdentityInitializer
                     {
                         result = await userManager.AddToRoleAsync(adminUser, "Admin");
                     }
+                    // crate user role
+                    var userRole = new ApplicationRole("user");
+                    result = await roleManager.CreateAsync(userRole);
+                    result = await userManager.AddToRoleAsync(adminUser, "user");
                 }
             }
             
-            // crate user role
-            var userRole = new ApplicationRole("user");
-            result = await roleManager.CreateAsync(userRole);
+            
         }
     }
 #pragma warning restore CS8604

@@ -2,9 +2,9 @@
 
 public class PageInfo
 {
-    public required uint TotalItems { get; set; }
-    public required uint ItemsPerPage { get; set; }
-    public required uint CurrentPage { get; set; }
+    public required int TotalItems { get; set; }
+    public required int ItemsPerPage { get; set; }
+    public required int CurrentPage { get; set; }
 
-    public uint TotalPages => (uint) Math.Ceiling((decimal) TotalItems / ItemsPerPage);
+    public int TotalPages => (int) Math.Ceiling((decimal) TotalItems / ItemsPerPage);
 }

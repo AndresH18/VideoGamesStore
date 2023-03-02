@@ -1,20 +1,21 @@
 ﻿@model ListViewModel<ApplicationUser>
 @{
     ViewBag.Title = "Users";
-    Layout = "_Layout";
+    Layout = "_AdminLayout";
 }
 
 <h2>Users</h2>
 
 
 <div class="mb-1">
-    <table class="table table-sm table-striped table-bordered">
+    <table class="table table-sm table-striped table-bordered table-info table-hover">
 
         <thead>
         <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Roles</th>
+            <th class="text-center">Is Verified</th>
             @* <th>Type</th> *@
             @* <th>Status</th> *@
             <td></td>
@@ -27,10 +28,18 @@
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
                 <td>@string.Join("; ", user.UserRoles.Select(ur => ur.Role.Name))</td>
+                <td class="text-center">@(user.EmailConfirmed ? "VERIFIED" : "PENDING")</td>
+
+                <td>
+                    <div class="container row justify-content-evenly text-center">
+                        <a asp-action="EditUser" asp-route-userId="@user.Id" class="col-2 p-3 fa-regular fa-pen-to-square text-black text-decoration-none bg-opacity-75 bg-success"></a>
+                        <a class="col-2 p-3 fa-solid fa-trash text-black text-decoration-none bg-opacity-75 bg-danger"></a>
+                    </div>
+
+                </td>
             </tr>
         }
         </tbody>
-
     </table>
 </div>
 
