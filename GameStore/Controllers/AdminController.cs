@@ -77,12 +77,20 @@ public class AdminController : Controller
         {
             model = await _repo.GetOrders(pageNumber, "");
         }
+
         return View(model);
     }
 
     public IActionResult Products()
     {
         return View(nameof(Index));
+    }
+
+    [HttpPost]
+    public RedirectResult Ship([FromForm] int orderId, [FromForm] string returnUrl = nameof(Orders))
+    {
+        _repo.Ship(orderId);
+        return Redirect(returnUrl);
     }
 
     private void AddModelErrors(IEnumerable<IdentityError> errors)

@@ -90,7 +90,8 @@ public class AdminRepository : IAdminRepository
 
             return await _userManager.DeleteAsync(user);
         }
-        return IdentityResult.Failed(new IdentityError { Description = "Cannot delete current user" });
+
+        return IdentityResult.Failed(new IdentityError {Description = "Cannot delete current user"});
     }
 
     public async Task<IdentityResult> VerifyUser(Guid userId)
@@ -136,8 +137,13 @@ public class AdminRepository : IAdminRepository
         if (filter is "shipped" or "unshipped")
         {
             var shippingStatus = filter == "shipped";
-            var totalOrders = _gamesContext.Orders.Where(o => o.Shipped == shippingStatus).Count();
-            var orders = await _gamesContext.Orders.Where(o => o.Shipped == shippingStatus).Skip(PageSize * (pageIndex - 1)).Take(PageSize).ToListAsync();
+            var totalOrders = _gamesContext.Orders.Count(o => o.Shipped == shippingStatus);
+            var orders = await _gamesContext.Orders
+                .Include(o => o.OrderItems)
+                .Where(o => o.Shipped == shippingStatus)
+                .Skip(PageSize * (pageIndex - 1))
+                .Take(PageSize)
+                .ToListAsync();
 
             return new ListViewModel<Order>
             {
@@ -150,10 +156,15 @@ public class AdminRepository : IAdminRepository
                 }
             };
         }
-        else if (string.IsNullOrWhiteSpace(filter))
+
+        if (string.IsNullOrWhiteSpace(filter))
         {
             var totalOrders = _gamesContext.Orders.Count();
-            var orders = await _gamesContext.Orders.Skip(PageSize * (pageIndex - 1)).Take(PageSize).ToListAsync();
+            var orders = await _gamesContext.Orders
+                .Include(o => o.OrderItems)
+                .Skip(PageSize * (pageIndex - 1))
+                .Take(PageSize)
+                .ToListAsync();
 
             return new ListViewModel<Order>
             {
@@ -166,10 +177,18 @@ public class AdminRepository : IAdminRepository
                 }
             };
         }
-        else
-        {
-            return new ListViewModel<Order>();
-        }
+
+        return new ListViewModel<Order>();
     }
 
+    public async Task Ship(int orderId)
+    {
+        var order = await _gamesContext.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
+        if (order != null)
+        {
+            order.Shipped = true;
+            _gamesContext.Orders.Update(order);
+            await _gamesContext.SaveChangesAsync();
+        }
+    }
 }

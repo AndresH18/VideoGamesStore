@@ -41,5 +41,10 @@ public class GamesDbContext : DbContext
         modelBuilder.Entity<Game>().HasData(
             new Game {Id = 1, Name = "Metroid Prime Remastered", GenreId = 1, Price = 100_000},
             new Game {Id = 2, Name = "Doom Eternal", GenreId = 3, Price = 150_000});
+
+        modelBuilder.Entity<Order>(o =>
+        {
+            o.HasMany(order => order.OrderItems).WithOne(ot => ot.Order);
+        });
     }
 }

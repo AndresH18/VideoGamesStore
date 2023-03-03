@@ -38,4 +38,6 @@ public interface IAdminRepository
     /// <returns></returns>
     /// </summary>
     public Task<ListViewModel<Order>> GetOrders(int pageIndex, string filter);
+
+    public Task Ship(int orderId);
 }

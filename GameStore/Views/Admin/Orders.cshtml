@@ -8,11 +8,11 @@
 <nav class="container mb-3">
     <div class="d-flex gap-4">
         <a asp-action="Orders" asp-route-filter="unshipped"
-            class="col-2 text-black text-decoration-none btn btn-warning">
-            <span class="me-1">Shipped</span><span class="fa-solid fa-warehouse"></span>
+           class="col-2 text-black text-decoration-none btn btn-success">
+            <span class="me-1">Un-Shipped</span><span class="fa-solid fa-warehouse"></span>
         </a>
-        <a asp-action="Orders" asp-route-filter="shipped" class="col-2 text-black text-decoration-none btn btn-success">
-            <span>Un-Shipped</span> <span class="fa-solid fa-truck-arrow-right"></span>
+        <a asp-action="Orders" asp-route-filter="shipped" class="col-2 text-black text-decoration-none btn btn-warning">
+            <span>Shipped</span> <span class="fa-solid fa-truck-arrow-right"></span>
         </a>
         <a asp-action="Orders" class="col-1 text-white text-decoration-none btn btn-primary">
             <span>All</span>
@@ -20,52 +20,98 @@
     </div>
 </nav>
 
-@* Orders *@
+@* Orders table *@
 <div class="mb-1">
-    <table class="table table-sm table-stripped table-bordered table-info table-hover">
+    <table class="table table-stripped table-bordered table-hover">
         <thead>
-            <tr>
-                <th>@(ViewBag.filter != null ? (ViewBag.filter == "" ? "Orders" : ViewBag.filter) : "Orders")</th>
-            </tr>
+        <tr>
+            <th>Order ID</th>
+            <th>Client Name</th>
+            <th>Country</th>
+            <td></td>
+            <td></td>
+            @* <th colspan="4">@(ViewBag.filter != null ? (ViewBag.filter == "" ? "Orders" : ViewBag.filter) : "Orders")</th> *@
+            <th>Shipping</th>
+        </tr>
         </thead>
         <tbody>
-            @if (Model.Items.Any())
-            {
-                @foreach (var order in Model.Items)
-                {
-                    <tr>
-                        <td>@order.Name</td>
-                        <td>@order.Country</td>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <td>
-                            @* <button class="btn btn-sm btn-danger"
-                    @onclick="@(e => OrderSelected.InvokeAsync(order.Id))">
-                    @ButtonLabel
-                    </button> *@
-                        </td>
-                    </tr>
-                    @foreach (var item in order.OrderItems)
-                    {
-                        <tr>
-                            <td colspan="2"></td>
-                            <td>@item.Name</td>
-                            <td>@item.Quantity</td>
-                            <td></td>
-                        </tr>
-                    }
-                }
-            }
-            else
+        @if (Model.Items.Any())
+        {
+            @foreach (var order in Model.Items)
             {
                 <tr>
-                    <td colspan="5" class="text-center">No Orders</td>
+                    <td>@order.Id</td>
+                    <td>@order.Name</td>
+                    <td>@order.Country</td>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>@(order.Shipped ? "Shipped" : "")</th>
+                    @if (!order.Shipped)
+                    {
+                        <td @*rowspan="@order.OrderItems.Count"*@>
+                            <form asp-action="Ship" method="post" class="text-center">
+                                <input type="hidden" asp-route-returnUrl="@Context.Request.PathAndQuery()">
+                                <input type="hidden" name="orderId" value="@order.Id">
+                                <button type="submit" class="btn btn-sm btn-warning">Ship</button>
+                            </form>
+                        </td>
+                    }
+                    @* <td> *@
+                    @*     <button class="btn btn-sm btn-danger" *@
+                    @* @onclick="@(e => OrderSelected.InvokeAsync(order.Id))"> *@
+                    @* @ButtonLabel *@
+                    @* </button>  *@
+                    @* </td> *@
                 </tr>
+                @foreach (var item in order.OrderItems)
+                {
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>@item.Name</td>
+                        <td>@item.Quantity</td>
+                    </tr>
+                }
             }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">No Orders</td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>
+
 @if (Model.PageInfo != null)
 {
-    <partial name="_OrdersPartial" model="@Model.PageInfo" />
+    @* <partial name="_OrdersPartial" model="@Model.PageInfo"/> *@
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.PageInfo.CurrentPage <= 1 ? "disabled" : "")">
+                <a asp-controller="Admin" asp-action="Orders" asp-route-pageNumber="@(Model.PageInfo.CurrentPage - 1)" class="page-link"
+                   aria-label="previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            @for (var i = Model.PageInfo.CurrentPage - 2; i <= Model.PageInfo.CurrentPage + 2; i++)
+            {
+                if (i > 0 && i <= Model.PageInfo.TotalPages)
+                {
+                    <li class="page-item @(Model.PageInfo.CurrentPage == i ? "active" : "")">
+                        <a asp-controller="Admin" asp-action="Orders" asp-route-pageNumber="@i" class="page-link">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+            <li class="page-item @(Model.PageInfo.CurrentPage >= Model.PageInfo.TotalPages ? "disabled" : "")">
+                <a asp-controller="Admin" asp-action="Orders" asp-route-pageNumber="@(Model.PageInfo.CurrentPage + 1)" class="page-link" aria-label="next">
+                    <span class="sr-only">Next</span>
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 }
