@@ -1,0 +1,71 @@
+@model ListViewModel<Order>
+
+@{
+    Layout = "_AdminLayout";
+}
+<h1>Orders</h1>
+
+<nav class="container mb-3">
+    <div class="d-flex gap-4">
+        <a asp-action="Orders" asp-route-filter="unshipped"
+            class="col-2 text-black text-decoration-none btn btn-warning">
+            <span class="me-1">Shipped</span><span class="fa-solid fa-warehouse"></span>
+        </a>
+        <a asp-action="Orders" asp-route-filter="shipped" class="col-2 text-black text-decoration-none btn btn-success">
+            <span>Un-Shipped</span> <span class="fa-solid fa-truck-arrow-right"></span>
+        </a>
+        <a asp-action="Orders" class="col-1 text-white text-decoration-none btn btn-primary">
+            <span>All</span>
+        </a>
+    </div>
+</nav>
+
+@* Orders *@
+<div class="mb-1">
+    <table class="table table-sm table-stripped table-bordered table-info table-hover">
+        <thead>
+            <tr>
+                <th>@(ViewBag.filter != null ? (ViewBag.filter == "" ? "Orders" : ViewBag.filter) : "Orders")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Any())
+            {
+                @foreach (var order in Model.Items)
+                {
+                    <tr>
+                        <td>@order.Name</td>
+                        <td>@order.Country</td>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <td>
+                            @* <button class="btn btn-sm btn-danger"
+                    @onclick="@(e => OrderSelected.InvokeAsync(order.Id))">
+                    @ButtonLabel
+                    </button> *@
+                        </td>
+                    </tr>
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>@item.Name</td>
+                            <td>@item.Quantity</td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No Orders</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model.PageInfo != null)
+{
+    <partial name="_OrdersPartial" model="@Model.PageInfo" />
+}

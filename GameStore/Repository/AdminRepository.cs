@@ -90,7 +90,7 @@ public class AdminRepository : IAdminRepository
 
             return await _userManager.DeleteAsync(user);
         }
-        return IdentityResult.Failed(new IdentityError {Description = "Cannot delete current user"});
+        return IdentityResult.Failed(new IdentityError { Description = "Cannot delete current user" });
     }
 
     public async Task<IdentityResult> VerifyUser(Guid userId)
@@ -127,4 +127,49 @@ public class AdminRepository : IAdminRepository
 
         return result;
     }
+
+    public async Task<ListViewModel<Order>> GetOrders(int pageIndex, string filter)
+    {
+        if (pageIndex <= 0)
+            return new ListViewModel<Order>();
+
+        if (filter is "shipped" or "unshipped")
+        {
+            var shippingStatus = filter == "shipped";
+            var totalOrders = _gamesContext.Orders.Where(o => o.Shipped == shippingStatus).Count();
+            var orders = await _gamesContext.Orders.Where(o => o.Shipped == shippingStatus).Skip(PageSize * (pageIndex - 1)).Take(PageSize).ToListAsync();
+
+            return new ListViewModel<Order>
+            {
+                Items = orders,
+                PageInfo = new PageInfo
+                {
+                    TotalItems = totalOrders,
+                    CurrentPage = pageIndex,
+                    ItemsPerPage = PageSize
+                }
+            };
+        }
+        else if (string.IsNullOrWhiteSpace(filter))
+        {
+            var totalOrders = _gamesContext.Orders.Count();
+            var orders = await _gamesContext.Orders.Skip(PageSize * (pageIndex - 1)).Take(PageSize).ToListAsync();
+
+            return new ListViewModel<Order>
+            {
+                Items = orders,
+                PageInfo = new PageInfo
+                {
+                    TotalItems = totalOrders,
+                    CurrentPage = pageIndex,
+                    ItemsPerPage = PageSize
+                }
+            };
+        }
+        else
+        {
+            return new ListViewModel<Order>();
+        }
+    }
+
 }

@@ -31,4 +31,11 @@ public interface IAdminRepository
     public Task<IdentityResult> DeleteUser(Guid userId, ClaimsPrincipal currentUser);
 
     // public Task<IdentityResult> VerifyUser(Guid userid);
+    /// <summary>
+    /// Returns a page of <see cref="Order"/>. The page contains shipped, unshipped or both types of orders
+    /// <param name="pageIndex">The non zero number of the page</param>
+    /// <param name="filter">The category to filter the orders, should be either <b>shipped</b>, <b>unshipped</b>, or ""(empty).</param>
+    /// <returns></returns>
+    /// </summary>
+    public Task<ListViewModel<Order>> GetOrders(int pageIndex, string filter);
 }

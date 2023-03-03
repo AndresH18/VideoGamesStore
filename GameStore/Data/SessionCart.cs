@@ -35,4 +35,9 @@ public class SessionCart : Cart
         base.RemoveItem(game);
         Session?.SetJson(nameof(Cart), this);
     }
+    public override void Clear()
+    {
+        base.Clear();
+        Session?.Remove(nameof(Cart));
+    }
 }

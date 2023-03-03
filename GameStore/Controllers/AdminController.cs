@@ -1,4 +1,5 @@
-﻿using GameStore.Data.ViewModels;
+﻿using GameStore.Data.Models;
+using GameStore.Data.ViewModels;
 using GameStore.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -64,9 +65,19 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Users));
     }
 
-    public IActionResult Orders()
+    public async Task<IActionResult> Orders(int pageNumber = 1, string select = "")
     {
-        return View(nameof(Index));
+        ListViewModel<Order> model;
+        if (select is "shipped" or "unshipped" or "")
+        {
+            ViewBag.filter = select;
+            model = await _repo.GetOrders(pageNumber, select);
+        }
+        else
+        {
+            model = await _repo.GetOrders(pageNumber, "");
+        }
+        return View(model);
     }
 
     public IActionResult Products()
