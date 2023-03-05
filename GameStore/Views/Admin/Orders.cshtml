@@ -45,7 +45,7 @@
                     <td>@order.Country</td>
                     <th>Product</th>
                     <th>Quantity</th>
-                    <th>@(order.Shipped ? "Shipped" : "")</th>
+                    <td class="text-end">@(order.Shipped ? "Shipped" : "")</td>
                     @if (!order.Shipped)
                     {
                         <td @*rowspan="@order.OrderItems.Count"*@>
