@@ -87,9 +87,9 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public RedirectResult Ship([FromForm] int orderId, [FromForm] string returnUrl = nameof(Orders))
+    public async Task<RedirectResult> Ship([FromForm] int orderId, [FromForm] string returnUrl = nameof(Orders))
     {
-        _repo.Ship(orderId);
+        await _repo.Ship(orderId);
         return Redirect(returnUrl);
     }
 
