@@ -5,6 +5,7 @@ using GameStore.Data.Models;
 using GameStore.Data.ViewModels;
 using GameStore.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Repository;
@@ -26,25 +27,25 @@ public class AdminRepository : IAdminRepository
         _signInManager = signInManager;
     }
 
-    public async Task<ListViewModel<Game>> GetProducts(int pageIndex)
-    {
-        if (pageIndex <= 0)
-            return new ListViewModel<Game>();
-
-        var totalGames = await _gamesContext.Games.CountAsync();
-        var games = await _gamesContext.Games.Skip(PageSize * (pageIndex - 1)).Take(PageSize).ToListAsync();
-
-        return new ListViewModel<Game>
-        {
-            Items = games,
-            PageInfo = new PageInfo
-            {
-                TotalItems = totalGames,
-                CurrentPage = pageIndex,
-                ItemsPerPage = PageSize,
-            }
-        };
-    }
+    // public async Task<ListViewModel<Game>> GetProducts(int pageIndex)
+    // {
+    //     if (pageIndex <= 0)
+    //         return new ListViewModel<Game>();
+    //
+    //     var totalGames = await _gamesContext.Games.CountAsync();
+    //     var games = await _gamesContext.Games.Skip(PageSize * (pageIndex - 1)).Take(PageSize).ToListAsync();
+    //
+    //     return new ListViewModel<Game>
+    //     {
+    //         Items = games,
+    //         PageInfo = new PageInfo
+    //         {
+    //             TotalItems = totalGames,
+    //             CurrentPage = pageIndex,
+    //             ItemsPerPage = PageSize,
+    //         }
+    //     };
+    // }
 
     public async Task<ListViewModel<ApplicationUser>> GetUsers(int pageIndex)
     {
@@ -159,7 +160,7 @@ public class AdminRepository : IAdminRepository
 
         if (string.IsNullOrWhiteSpace(filter))
         {
-            var totalOrders = _gamesContext.Orders.Count();
+            var totalOrders = await _gamesContext.Orders.CountAsync();
             var orders = await _gamesContext.Orders
                 .Include(o => o.OrderItems)
                 .Skip(PageSize * (pageIndex - 1))
@@ -188,6 +189,76 @@ public class AdminRepository : IAdminRepository
         {
             order.Shipped = true;
             _gamesContext.Orders.Update(order);
+            await _gamesContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task<GamesListViewModel> GetProducts(int pageNumber, int genreId)
+    {
+        if (pageNumber <= 0 || genreId < 0)
+            return new GamesListViewModel();
+        List<Game> games;
+        var genres = await _gamesContext.Genres.ToListAsync();
+
+        if (genreId == 0)
+        {
+            var totalGames = await _gamesContext.Games.CountAsync();
+
+            games = await _gamesContext.Games
+                .Include(g => g.Genre)
+                .Skip(PageSize * (pageNumber - 1))
+                .Take(PageSize)
+                .ToListAsync();
+
+
+            return new GamesListViewModel
+            {
+                Items = games,
+                GenresSelectList = genres.Select(g => new SelectListItem(g.Name, g.Id.ToString())),
+                PageInfo = new PageInfo {CurrentPage = pageNumber, ItemsPerPage = PageSize, TotalItems = totalGames}
+            };
+        }
+
+        // var genre = await _gamesContext.Genres.Include(g => g.Games).FirstOrDefaultAsync(g => g.Id == genreId);
+        // if (genre != null)
+        // {
+        //     var games = await _gamesContext.Games.Where()
+        // }
+
+        var totalGenreGames = await _gamesContext.Genres.CountAsync(g => g.Id == genreId);
+        var genre = await _gamesContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+
+        games = await _gamesContext.Games
+            .Where(g => g.GenreId == genreId)
+            .Skip(PageSize * (pageNumber - 1))
+            .Take(PageSize)
+            .Include(g => g.Genre)
+            .ToListAsync();
+
+        return new GamesListViewModel
+        {
+            Items = games,
+            GenresSelectList = genres.Select(g =>
+                new SelectListItem(g.Name, g.Id.ToString(), g.Id == games.First().GenreId)),
+            Genre = (genre!.Name, genre.Id),
+            PageInfo = new PageInfo
+            {
+                TotalItems = totalGenreGames,
+                CurrentPage = pageNumber,
+                ItemsPerPage = PageSize,
+            }
+        };
+    }
+
+    public async Task DeleteProduct(int gameId)
+    {
+        if (gameId <= 0)
+            return;
+
+        var game = await _gamesContext.Games.FirstOrDefaultAsync(g => g.Id == gameId);
+        if (game != null)
+        {
+            _gamesContext.Remove(game);
             await _gamesContext.SaveChangesAsync();
         }
     }

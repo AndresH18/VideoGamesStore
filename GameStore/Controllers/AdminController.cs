@@ -37,17 +37,6 @@ public class AdminController : Controller
             : View(nameof(Users));
     }
 
-    // public async Task<RedirectResult> VerifyUser(Guid userId, string returnUrl = "Users")
-    // {
-    //     await _repo.VerifyUser(userId);
-    //     return Redirect(returnUrl);
-    // }
-    public async Task<RedirectResult> DeleteUser(Guid userId, string returnUrl = nameof(Users))
-    {
-        await _repo.DeleteUser(userId, User);
-        return Redirect(returnUrl);
-    }
-
     [HttpPost]
     public async Task<IActionResult> EditUser(UserViewModel model)
     {
@@ -65,6 +54,23 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Users));
     }
 
+    // public ViewResult CreateUser()
+    // {
+    //     return View(nameof(EditUser), new UserViewModel());
+    // }
+
+    // public async Task<RedirectResult> VerifyUser(Guid userId, string returnUrl = "Users")
+    // {
+    //     await _repo.VerifyUser(userId);
+    //     return Redirect(returnUrl);
+    // }
+    public async Task<RedirectResult> DeleteUser(Guid userId, string returnUrl = nameof(Users))
+    {
+        await _repo.DeleteUser(userId, User);
+        return Redirect(returnUrl);
+    }
+
+
     public async Task<IActionResult> Orders(int pageNumber = 1, string select = "")
     {
         ListViewModel<Order> model;
@@ -81,13 +87,37 @@ public class AdminController : Controller
         return View(model);
     }
 
-    public IActionResult Products()
+    public async Task<IActionResult> Products(int pageNumber = 1, int genreId = 0)
     {
-        return View(nameof(Index));
+        var model = await _repo.GetProducts(pageNumber, genreId);
+
+        return View(model);
+    }
+
+    public RedirectResult DeleteProduct(int gameId, string returnUrl = nameof(Products))
+    {
+        if (gameId != 0)
+        {
+            _repo.DeleteProduct(gameId);
+        }
+
+        return Redirect(returnUrl);
+    }
+
+    public IActionResult EditProduct(int gameId, string returnUrl = nameof(Products))
+    {
+        if (gameId == 0)
+        {
+            // create new game
+            return View(nameof(Products));
+        }
+
+        // edit Game
+        return View(nameof(Products));
     }
 
     [HttpPost]
-    public async Task<RedirectResult> Ship([FromForm] int orderId, [FromForm] string returnUrl = nameof(Orders))
+    public async Task<RedirectResult> ShipOrder([FromForm] int orderId, [FromForm] string returnUrl = nameof(Orders))
     {
         await _repo.Ship(orderId);
         return Redirect(returnUrl);

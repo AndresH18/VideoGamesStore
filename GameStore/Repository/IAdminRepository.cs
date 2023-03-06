@@ -9,10 +9,13 @@ namespace GameStore.Repository;
 public interface IAdminRepository
 {
     /// <summary>
-    /// Returns a page of games
+    /// Returns a page of games of a specific genre. If <paramref name="genreId"/> is 0, returns a games without being filtered by a category.
     /// </summary>
-    /// <param name="pageIndex">The non zero number of the page</param>
-    public Task<ListViewModel<Game>> GetProducts(int pageIndex);
+    /// <param name="pageNumber">The non zero number of the page</param>
+    /// <param name="genreId">The id of the genre, if 0 then doesn't filter by category</param>
+    public Task<GamesListViewModel> GetProducts(int pageNumber, int genreId);
+
+    public Task DeleteProduct(int gameId);
 
     /// <summary>
     /// Returns a page of users

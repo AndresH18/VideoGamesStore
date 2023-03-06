@@ -1,0 +1,86 @@
+﻿@model GamesListViewModel
+@{
+    ViewBag.Title = "Products";
+    Layout = "_AdminLayout";
+}
+
+<h2></h2>
+
+<nav>
+    @* Filter Menu *@
+    <div class="col-2 mb-2">
+        @* Genres Menu *@
+        <div class="row dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">@(Model.Genre?.genre ?? "Genres")</button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a asp-controller="Admin" asp-action="Products" class="dropdown-item">Select</a>
+                </li>
+                @foreach (var genre in Model.GenresSelectList)
+                {
+                    <li>
+                        <a asp-controller="Admin" asp-action="Products" asp-route-gameGenre="@genre.Value" class="dropdown-item">@genre.Text</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div>
+    <ul class="list-group">
+        @foreach (var game in Model.Items)
+        {
+            <li class="list-group-item">
+                <div class="container-fluid row bg-gradient p-1">
+                    <div class="col">
+                        <h4>
+                            @game.Name
+                            <span class="badge round-pill bg-primary text-white" style="float:right">
+                                <small>@game.Price.ToString("C")</small>
+                            </span>
+                        </h4>
+                        @* More game info *@
+                    </div>
+                    <div class="col-2 d-flex gap-3 justify-content-center">
+                        <a asp-action="EditProduct" asp-route-gameId="@game.Id" asp-route-returnUrl="@Context.Request.PathAndQuery" class="p-3 fa-regular fa-pen-to-square text-black text-decoration-none bg-opacity-75 bg-success"></a>
+                        <a asp-action="DeleteProduct" asp-route-gameId="@game.Id" asp-route-returnUrl="@Context.Request.PathAndQuery" class="p-3 fa-solid fa-trash text-black text-decoration-none bg-opacity-75 bg-danger"></a>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+
+</div>
+
+@if (Model.PageInfo != null)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.PageInfo.CurrentPage <= 1 ? "disabled" : "")">
+                <a asp-controller="Admin" asp-action="Products" asp-route-pageNumber="@(Model.PageInfo.CurrentPage - 1)" class="page-link"
+                   aria-label="previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            @for (var i = Model.PageInfo.CurrentPage - 2; i <= Model.PageInfo.CurrentPage + 2; i++)
+            {
+                if (i > 0 && i <= Model.PageInfo.TotalPages)
+                {
+                    <li class="page-item @(Model.PageInfo.CurrentPage == i ? "active" : "")">
+                        <a asp-controller="Admin" asp-action="Products" asp-route-pageNumber="@i" class="page-link">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+            <li class="page-item @(Model.PageInfo.CurrentPage >= Model.PageInfo.TotalPages ? "disabled" : "")">
+                <a asp-controller="Admin" asp-action="Products" asp-route-pageNumber="@(Model.PageInfo.CurrentPage + 1)" class="page-link" aria-label="next">
+                    <span class="sr-only">Next</span>
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+}

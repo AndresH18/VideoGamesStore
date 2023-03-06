@@ -1,9 +1,10 @@
 ﻿using GameStore.Data.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GameStore.Data.ViewModels;
 
-public class GamesListViewModel
+public class GamesListViewModel : ListViewModel<Game>
 {
-    public IEnumerable<Game> Games { get; init; } = Enumerable.Empty<Game>();
-    public IEnumerable<Genre> Genres { get; init; } = Enumerable.Empty<Genre>();
+    public IEnumerable<SelectListItem> GenresSelectList { get; set; } = Enumerable.Empty<SelectListItem>();
+    public (string genre, int id)? Genre { get; set; }
 }
