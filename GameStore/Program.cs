@@ -1,20 +1,16 @@
 using GameStore.Data;
-using GameStore.Data.Identity;
 using GameStore.Repository;
 using GameStore.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ApplicationUser = GameStore.Data.Identity.ApplicationUser;
+using ApplicationUser = GameStore.Data.ApplicationUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<GamesDbContext>(d =>
-    d.UseSqlServer(builder.Configuration.GetConnectionString("GamesDb")));
-
-builder.Services.AddDbContext<UsersContext>(d =>
-    d.UseSqlServer(builder.Configuration.GetConnectionString("UsersDb")));
+builder.Services.AddDbContext<ApplicationContext>(d =>
+d.UseSqlServer(builder.Configuration.GetConnectionString("azuredb")));
 
 // builder.Services.AddDefaultIdentity<GameStoreUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //     .AddEntityFrameworkStores<UsersContext>();
@@ -23,7 +19,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         options.SignIn.RequireConfirmedAccount = false;
         options.User.RequireUniqueEmail = true;
     })
-    .AddEntityFrameworkStores<UsersContext>()
+    .AddEntityFrameworkStores<ApplicationContext>()
     .AddRoleManager<RoleManager<ApplicationRole>>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

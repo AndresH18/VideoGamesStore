@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using GameStore.Data.Identity;
+using GameStore.Data;
 using GameStore.Data.Models;
 using GameStore.Data.ViewModels;
 using Microsoft.AspNetCore.Identity;

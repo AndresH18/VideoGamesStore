@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using GameStore.Data.Identity;
 
 namespace GameStore.Data.ViewModels;
 

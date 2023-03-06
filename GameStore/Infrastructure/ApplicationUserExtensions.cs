@@ -1,4 +1,4 @@
-﻿using GameStore.Data.Identity;
+﻿using GameStore.Data;
 using GameStore.Data.ViewModels;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Manage.Internal;
 

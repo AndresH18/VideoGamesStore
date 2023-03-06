@@ -1,5 +1,4 @@
-﻿using GameStore.Data.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace GameStore.Data;
 #pragma warning disable CS8604

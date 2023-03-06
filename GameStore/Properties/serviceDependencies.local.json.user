@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2023-03-06T16:23:27.7618717Z"
+    },
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2023-03-06T16:23:13.2992846Z"
+    }
+  },
+  "parameters": {
+    "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
+      "Type": "subscription",
+      "Value": "403472aa-ede4-419d-81cb-0e69ce624cd7"
+    },
+    "mssql1.resourceGroupName": {
+      "Name": "mssql1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "ing-web"
+    }
+  }
+}

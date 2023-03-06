@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using GameStore.Data;
-using GameStore.Data.Identity;
 using GameStore.Data.Models;
 using GameStore.Data.ViewModels;
 using GameStore.Infrastructure;
@@ -13,16 +12,14 @@ namespace GameStore.Repository;
 public class AdminRepository : IAdminRepository
 {
     private const int PageSize = 20;
-    private readonly UsersContext _usersContext;
-    private readonly GamesDbContext _gamesContext;
+    private readonly ApplicationContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public AdminRepository(UsersContext usersContext, GamesDbContext gamesContext,
+    public AdminRepository(ApplicationContext context,
         UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
-        _usersContext = usersContext;
-        _gamesContext = gamesContext;
+        _context= context;
         _userManager = userManager;
         _signInManager = signInManager;
     }
@@ -52,8 +49,8 @@ public class AdminRepository : IAdminRepository
         if (pageIndex <= 0)
             return new ListViewModel<ApplicationUser>();
 
-        var totalUsers = await _usersContext.Users.CountAsync();
-        var users = await _usersContext.Users
+        var totalUsers = await _context.Users.CountAsync();
+        var users = await _context.Users
             .Skip(PageSize * (pageIndex - 1))
             .Take(PageSize)
             .Include(u => u.UserRoles)
@@ -75,7 +72,7 @@ public class AdminRepository : IAdminRepository
     public async Task<ApplicationUser?> GetUser(Guid userId)
     {
         // TODO: use UserManager. You would need to get the Users and then the Roles
-        return await _usersContext.Users
+        return await _context.Users
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Id == userId);
@@ -138,8 +135,8 @@ public class AdminRepository : IAdminRepository
         if (filter is "shipped" or "unshipped")
         {
             var shippingStatus = filter == "shipped";
-            var totalOrders = _gamesContext.Orders.Count(o => o.Shipped == shippingStatus);
-            var orders = await _gamesContext.Orders
+            var totalOrders = _context.Orders.Count(o => o.Shipped == shippingStatus);
+            var orders = await _context.Orders
                 .Include(o => o.OrderItems)
                 .Where(o => o.Shipped == shippingStatus)
                 .Skip(PageSize * (pageIndex - 1))
@@ -160,8 +157,8 @@ public class AdminRepository : IAdminRepository
 
         if (string.IsNullOrWhiteSpace(filter))
         {
-            var totalOrders = await _gamesContext.Orders.CountAsync();
-            var orders = await _gamesContext.Orders
+            var totalOrders = await _context.Orders.CountAsync();
+            var orders = await _context.Orders
                 .Include(o => o.OrderItems)
                 .Skip(PageSize * (pageIndex - 1))
                 .Take(PageSize)
@@ -184,12 +181,12 @@ public class AdminRepository : IAdminRepository
 
     public async Task Ship(int orderId)
     {
-        var order = await _gamesContext.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
+        var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
         if (order != null)
         {
             order.Shipped = true;
-            _gamesContext.Orders.Update(order);
-            await _gamesContext.SaveChangesAsync();
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
         }
     }
 
@@ -198,13 +195,13 @@ public class AdminRepository : IAdminRepository
         if (pageNumber <= 0 || genreId < 0)
             return new GamesListViewModel();
         List<Game> games;
-        var genres = await _gamesContext.Genres.ToListAsync();
+        var genres = await _context.Genres.ToListAsync();
 
         if (genreId == 0)
         {
-            var totalGames = await _gamesContext.Games.CountAsync();
+            var totalGames = await _context.Games.CountAsync();
 
-            games = await _gamesContext.Games
+            games = await _context.Games
                 .Include(g => g.Genre)
                 .Skip(PageSize * (pageNumber - 1))
                 .Take(PageSize)
@@ -225,10 +222,10 @@ public class AdminRepository : IAdminRepository
         //     var games = await _gamesContext.Games.Where()
         // }
 
-        var totalGenreGames = await _gamesContext.Genres.CountAsync(g => g.Id == genreId);
-        var genre = await _gamesContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+        var totalGenreGames = await _context.Genres.CountAsync(g => g.Id == genreId);
+        var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
 
-        games = await _gamesContext.Games
+        games = await _context.Games
             .Where(g => g.GenreId == genreId)
             .Skip(PageSize * (pageNumber - 1))
             .Take(PageSize)
@@ -255,11 +252,11 @@ public class AdminRepository : IAdminRepository
         if (gameId <= 0)
             return;
 
-        var game = await _gamesContext.Games.FirstOrDefaultAsync(g => g.Id == gameId);
+        var game = await _context.Games.FirstOrDefaultAsync(g => g.Id == gameId);
         if (game != null)
         {
-            _gamesContext.Remove(game);
-            await _gamesContext.SaveChangesAsync();
+            _context.Remove(game);
+            await _context.SaveChangesAsync();
         }
     }
 }

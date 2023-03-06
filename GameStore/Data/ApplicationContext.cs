@@ -1,17 +1,25 @@
+﻿using GameStore.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GameStore.Data.Identity;
+namespace GameStore.Data;
 
-public class UsersContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, IdentityUserClaim<Guid>,
-    ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+public class ApplicationContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, IdentityUserClaim<Guid>,
+ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
-    public UsersContext(DbContextOptions<UsersContext> options)
+    public ApplicationContext()
+    {
+
+    }
+    public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
     {
     }
+
+    public DbSet<Game> Games { get; set; } = default!;
+    public DbSet<Genre> Genres { get; set; } = default!;
+    public DbSet<Order> Orders { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -62,6 +70,20 @@ public class UsersContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
         });
+
+
+        builder.Entity<Genre>().HasData(
+            new Genre { Id = 1, Name = "Metroid-vania" },
+            new Genre { Id = 2, Name = "Puzzle" },
+            new Genre { Id = 3, Name = "First Person Shooter" });
+        builder.Entity<Game>().HasData(
+            new Game { Id = 1, Name = "Metroid Prime Remastered", GenreId = 1, Price = 100_000 },
+            new Game { Id = 2, Name = "Doom Eternal", GenreId = 3, Price = 150_000 });
+
+        builder.Entity<Order>(o =>
+        {
+            o.HasMany(order => order.OrderItems).WithOne(ot => ot.Order);
+        });
     }
-    
 }
+
