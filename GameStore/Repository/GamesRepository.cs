@@ -7,9 +7,9 @@ namespace GameStore.Repository;
 public class GamesRepository : IGamesRepository
 {
     private const int PageSize = 10;
-    private readonly GamesDbContext _db;
+    private readonly ApplicationContext _db;
 
-    public GamesRepository(GamesDbContext db)
+    public GamesRepository(ApplicationContext db)
     {
         _db = db;
     }
