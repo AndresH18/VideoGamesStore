@@ -19,6 +19,9 @@ public interface IAdminRepository
 
     public Task DeleteProduct(int gameId);
 
+    public Task UpdateProduct(GameViewModel model);
+    public Task CreateProduct(GameViewModel model);
+
     /// <summary>
     /// Returns a page of users
     /// </summary>

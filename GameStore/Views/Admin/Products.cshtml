@@ -6,25 +6,24 @@
 
 <h2></h2>
 
-<nav>
+<nav class="container d-flex mb-3 gap-3">
     @* Filter Menu *@
-    <div class="col-2 mb-2">
-        @* Genres Menu *@
-        <div class="row dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">@(Model.Genre?.genre ?? "Genres")</button>
-            <ul class="dropdown-menu">
+    @* Genres Menu *@
+    <div class="col-2 dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">@(Model.Genre?.genre ?? "Genres")</button>
+        <ul class="dropdown-menu">
+            <li>
+                <a asp-controller="Admin" asp-action="Products" class="dropdown-item">Select</a>
+            </li>
+            @foreach (var genre in Model.GenresSelectList)
+            {
                 <li>
-                    <a asp-controller="Admin" asp-action="Products" class="dropdown-item">Select</a>
+                    <a asp-controller="Admin" asp-action="Products" asp-route-gameGenre="@genre.Value" class="dropdown-item">@genre.Text</a>
                 </li>
-                @foreach (var genre in Model.GenresSelectList)
-                {
-                    <li>
-                        <a asp-controller="Admin" asp-action="Products" asp-route-gameGenre="@genre.Value" class="dropdown-item">@genre.Text</a>
-                    </li>
-                }
-            </ul>
-        </div>
+            }
+        </ul>
     </div>
+    <a class="btn btn-success" asp-action="EditProduct">Add Game</a>
 </nav>
 
 <div>
@@ -36,7 +35,7 @@
                     <div class="col">
                         <h4>
                             @game.Name
-                            <span class="badge round-pill bg-primary text-white" style="float:right">
+                            <span class="badge round-pill bg-primary text-white" style="float: right">
                                 <small>@game.Price.ToString("C")</small>
                             </span>
                         </h4>

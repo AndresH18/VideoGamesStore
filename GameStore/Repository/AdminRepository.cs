@@ -62,12 +62,14 @@ public class AdminRepository : IAdminRepository
 
     public async Task<IdentityResult> DeleteUser(Guid userId, ClaimsPrincipal currentUser)
     {
-        if (_userManager.GetUserId(currentUser) != userId.ToString() &&
-            _userManager.GetUserName(currentUser) != "andres-admin")
+        if (_userManager.GetUserId(currentUser) != userId.ToString())
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
                 return IdentityResult.Failed();
+
+            if (await _userManager.IsInRoleAsync(user, "root"))
+                return IdentityResult.Failed(new IdentityError { Description = "Cannot delete root admin" });
 
             return await _userManager.DeleteAsync(user);
         }
@@ -96,12 +98,10 @@ public class AdminRepository : IAdminRepository
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
             return result;
-        if (model.UserName == "andres-admin")
-        {
-            await _userManager.AddToRoleAsync(user, "admin");
-            await _userManager.AddToRoleAsync(user, "user");
+
+        if (await _userManager.IsInRoleAsync(user, "root"))
             return IdentityResult.Success;
-        }
+
 
         if (model.IsAdmin)
         {
@@ -233,6 +233,28 @@ public class AdminRepository : IAdminRepository
     public async Task<Game?> GetProduct(int gameId)
     {
         return await _context.Games.Include(g => g.Genre).FirstOrDefaultAsync(g => g.Id == gameId);
+    }
+
+    public async Task UpdateProduct(GameViewModel model)
+    {
+        var game = await _context.Games.FirstOrDefaultAsync();
+        if (game == null)
+            return;
+
+        game.Update(model);
+        _context.Update(game);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task CreateProduct(GameViewModel model)
+    {
+        var game = new Game
+        {
+            Name = model.Name,
+            Price = model.Price,
+        };
+        await _context.AddAsync(game);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteProduct(int gameId)
