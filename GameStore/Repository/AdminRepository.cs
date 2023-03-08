@@ -62,7 +62,8 @@ public class AdminRepository : IAdminRepository
 
     public async Task<IdentityResult> DeleteUser(Guid userId, ClaimsPrincipal currentUser)
     {
-        if (_userManager.GetUserId(currentUser) != userId.ToString())
+        if (_userManager.GetUserId(currentUser) != userId.ToString() &&
+            _userManager.GetUserName(currentUser) != "andres-admin")
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
@@ -71,7 +72,7 @@ public class AdminRepository : IAdminRepository
             return await _userManager.DeleteAsync(user);
         }
 
-        return IdentityResult.Failed(new IdentityError {Description = "Cannot delete current user"});
+        return IdentityResult.Failed(new IdentityError { Description = "Cannot delete current user" });
     }
 
     public async Task<IdentityResult> VerifyUser(Guid userId)
@@ -200,7 +201,7 @@ public class AdminRepository : IAdminRepository
             {
                 Items = games,
                 GenresSelectList = genres.Select(g => new SelectListItem(g.Name, g.Id.ToString())),
-                PageInfo = new PageInfo {CurrentPage = pageNumber, ItemsPerPage = PageSize, TotalItems = totalGames}
+                PageInfo = new PageInfo { CurrentPage = pageNumber, ItemsPerPage = PageSize, TotalItems = totalGames }
             };
         }
 
@@ -227,6 +228,11 @@ public class AdminRepository : IAdminRepository
                 ItemsPerPage = PageSize,
             }
         };
+    }
+
+    public async Task<Game?> GetProduct(int gameId)
+    {
+        return await _context.Games.Include(g => g.Genre).FirstOrDefaultAsync(g => g.Id == gameId);
     }
 
     public async Task DeleteProduct(int gameId)
