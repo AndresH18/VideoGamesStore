@@ -43,8 +43,8 @@
                         @* More game info *@
                     </div>
                     <div class="col-2 d-flex gap-3 justify-content-center">
-                        <a asp-action="EditProduct" asp-route-gameId="@game.Id" asp-route-returnUrl="@Context.Request.PathAndQuery" class="p-3 fa-regular fa-pen-to-square text-black text-decoration-none bg-opacity-75 bg-success"></a>
-                        <a asp-action="DeleteProduct" asp-route-gameId="@game.Id" asp-route-returnUrl="@Context.Request.PathAndQuery" class="p-3 fa-solid fa-trash text-black text-decoration-none bg-opacity-75 bg-danger"></a>
+                        <a asp-action="EditProduct" asp-route-gameId="@game.Id" asp-route-returnUrl="@Context.Request.PathAndQuery()" class="p-3 fa-regular fa-pen-to-square text-black text-decoration-none bg-opacity-75 bg-success"></a>
+                        <a asp-action="DeleteProduct" asp-route-gameId="@game.Id" asp-route-returnUrl="@Context.Request.PathAndQuery()" class="p-3 fa-solid fa-trash text-black text-decoration-none bg-opacity-75 bg-danger"></a>
                     </div>
                 </div>
             </li>
