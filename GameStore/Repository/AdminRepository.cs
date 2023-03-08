@@ -248,12 +248,21 @@ public class AdminRepository : IAdminRepository
 
     public async Task CreateProduct(GameViewModel model)
     {
+        var genreName = model.Genre.Split(",")[0];
+        var genre = await _context.Genres.FirstOrDefaultAsync(g => string.Equals(g.Name, genreName, StringComparison.CurrentCultureIgnoreCase));
+        if (genre == null)
+        {
+            genre = new Genre { Name = genreName };
+            await _context.Genres.AddAsync(new Genre { Name = genreName });
+        }
+
         var game = new Game
         {
             Name = model.Name,
             Price = model.Price,
+            Genre = genre
         };
-        await _context.AddAsync(game);
+        await _context.Games.AddAsync(game);
         await _context.SaveChangesAsync();
     }
 
@@ -265,7 +274,7 @@ public class AdminRepository : IAdminRepository
         var game = await _context.Games.FirstOrDefaultAsync(g => g.Id == gameId);
         if (game != null)
         {
-            _context.Remove(game);
+            _context.Games.Remove(game);
             await _context.SaveChangesAsync();
         }
     }
