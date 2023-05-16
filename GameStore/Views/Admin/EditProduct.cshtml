@@ -1,0 +1,33 @@
+@model GameViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+
+<h2>@Model.Name</h2>
+
+<div class="text-danger" asp-validation-summary="All"></div>
+
+<form asp-action="EditProduct" method="post" class="d-flex flex-column gap-3 mb-3 ms-3 me-1">
+    <input type="hidden" asp-for="Id">
+
+    <div>
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" type="text" placeholder="Game">
+    </div>
+    <div>
+        <label asp-for="Price" class="form-label">Price</label>
+        <input asp-for="Price" class="form-control" type="number" placeholder="Price" min="0">
+    </div>
+    <div>
+        <label asp-for="Genre" class="form-label">Genre</label>
+        <input asp-for="Genre" class="form-control" type="text" placeholder="Genre">
+    </div>
+    
+    <div class="d-flex gap-2">
+        <a href="@Model.ReturnUrl" class="btn btn-primary">Return</a>
+        <input type="submit" value="Accept" class="btn btn-secondary">
+    </div>
+    
+</form>

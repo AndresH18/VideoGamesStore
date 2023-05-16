@@ -15,7 +15,12 @@ public interface IAdminRepository
     /// <param name="genreId">The id of the genre, if 0 then doesn't filter by category</param>
     public Task<GamesListViewModel> GetProducts(int pageNumber, int genreId);
 
+    public Task<Game?> GetProduct(int gameId);
+
     public Task DeleteProduct(int gameId);
+
+    public Task UpdateProduct(GameViewModel model);
+    public Task CreateProduct(GameViewModel model);
 
     /// <summary>
     /// Returns a page of users
