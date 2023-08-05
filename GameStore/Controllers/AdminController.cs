@@ -98,13 +98,13 @@ public class AdminController : Controller
         if (gameId == 0)
         {
             // create new game
-            return View(new GameViewModel { ReturnUrl = returnUrl });
+            return View(new GameViewModel {ReturnUrl = returnUrl});
         }
 
         // edit Game
         var game = await _repo.GetProduct(gameId);
         if (game != null)
-            return View(new GameViewModel(game) { ReturnUrl = returnUrl });
+            return View(new GameViewModel(game) {ReturnUrl = returnUrl});
 
         return Redirect(returnUrl);
     }
@@ -114,17 +114,15 @@ public class AdminController : Controller
     {
         if (!ModelState.IsValid)
         {
-            
             return View(model);
         }
 
         if (model.Id != 0)
             await _repo.UpdateProduct(model);
-        else 
+        else
             await _repo.CreateProduct(model);
 
         return Redirect(nameof(Products));
-
     }
 
     [HttpPost]

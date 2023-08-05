@@ -249,11 +249,11 @@ public class AdminRepository : IAdminRepository
     public async Task CreateProduct(GameViewModel model)
     {
         var genreName = model.Genre.Split(",")[0];
-        var genre = await _context.Genres.FirstOrDefaultAsync(g => string.Equals(g.Name, genreName, StringComparison.CurrentCultureIgnoreCase));
+        var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == genreName);
         if (genre == null)
         {
             genre = new Genre { Name = genreName };
-            await _context.Genres.AddAsync(new Genre { Name = genreName });
+            await _context.Genres.AddAsync(genre);
         }
 
         var game = new Game

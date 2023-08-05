@@ -34,6 +34,7 @@ public static class IdentityInitializer
 
         var rootRole = await roleManager.FindByNameAsync("root");
         var adminRole = await roleManager.FindByNameAsync("admin");
+        var userRole = await roleManager.FindByNameAsync("user");
 
         if (rootRole == null)
         {
@@ -47,45 +48,14 @@ public static class IdentityInitializer
             await roleManager.CreateAsync(adminRole);
         }
 
-        await userManager.AddToRolesAsync(user, new[] { "root", "admin" });
-
-
-        /*// verify if there are any roles, if the database is new (empty) it should not contain any roles and would want to add data
-        if (!roleManager.Roles.ToList().Any())
+        if (userRole == null)
         {
-            // admin role
-            var adminRole = new ApplicationRole("admin");
-            var rootAdmin = new ApplicationRole("root");
-            // create admin role
-            var result = await roleManager.CreateAsync(adminRole);
-            if (result.Succeeded)
-            {
-                // view if admin user exists
-                var adminUser = await userManager.FindByEmailAsync(config["AdminCredentials:Email"]);
-                if (adminUser == null)
-                {
-                    // create admin user
-                    adminUser = new ApplicationUser
-                    {
-                        UserName = config["AdminCredentials:UserName"],
-                        Email = config["AdminCredentials:Email"],
-                        EmailConfirmed = true,
-                    };
-                    result = await userManager.CreateAsync(adminUser, config["AdminCredentials:Password"]);
-                    if (result.Succeeded)
-                    {
-                        result = await userManager.AddToRoleAsync(adminUser, "Admin");
-                    }
+            // create user role
+            userRole = new ApplicationRole("user");
+            await roleManager.CreateAsync(userRole);
+        }
 
-                    // crate user role
-                    var userRole = new ApplicationRole("user");
-                    result = await roleManager.CreateAsync(userRole);
-                    result = await userManager.AddToRoleAsync(adminUser, "user");
-                    result = await roleManager.CreateAsync(rootAdmin);
-                    await userManager.AddToRoleAsync(adminUser, "root");
-                }
-            }
-        }*/
+        await userManager.AddToRolesAsync(user, new[] {"root", "admin", "user"});
     }
 #pragma warning restore CS8604
 }

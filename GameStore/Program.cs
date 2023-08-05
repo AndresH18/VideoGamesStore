@@ -9,7 +9,7 @@ using ApplicationUser = GameStore.Data.Identity.ApplicationUser;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationContext>(d =>
-    d.UseSqlServer(builder.Configuration.GetConnectionString("azureDbInstance")));
+    d.UseSqlServer(builder.Configuration.GetConnectionString("GameStoreDb")));
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
@@ -39,7 +39,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthentication();
 
-builder.Services.ConfigureApplicationCookie(options => { });
+builder.Services.ConfigureApplicationCookie(_ => { });
 
 var app = builder.Build();
 
@@ -56,6 +56,8 @@ else
     app.UseSwagger();
     app.UseSwaggerUI();
 
+#if DEBUG
+
     #region Seed DB Data
 
     using (var scope = app.Services.CreateScope())
@@ -64,6 +66,8 @@ else
     }
 
     #endregion
+
+#endif
 }
 
 app.UseHttpsRedirection();
